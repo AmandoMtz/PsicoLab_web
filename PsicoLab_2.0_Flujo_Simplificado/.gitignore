@@ -1,0 +1,17 @@
+# Entorno y cachés de Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Datos de participantes: nunca se suben al repositorio
+*.sqlite3
+*.sqlite3-*
+respuestas_*.csv
+exportaciones/
+.env
+.env.*
+*.pem
+*.key
+.playwright/
+

@@ -1,0 +1,314 @@
+{
+  "Derecho": [
+    {
+      "titulo": "Asesoría y análisis contractual",
+      "preferencias_ilustrativas": "ISTJ",
+      "actividades": "Examinar contratos, normas y documentación de acuerdos."
+    },
+    {
+      "titulo": "Litigio y argumentación",
+      "preferencias_ilustrativas": "ENTP",
+      "actividades": "Construir argumentos y analizar distintas interpretaciones."
+    },
+    {
+      "titulo": "Mediación y conciliación",
+      "preferencias_ilustrativas": "ENFJ",
+      "actividades": "Facilitar conversaciones y orientar acuerdos entre partes."
+    },
+    {
+      "titulo": "Investigación jurídica",
+      "preferencias_ilustrativas": "INTP",
+      "actividades": "Estudiar jurisprudencia, doctrina y problemas jurídicos."
+    },
+    {
+      "titulo": "Cumplimiento normativo",
+      "preferencias_ilustrativas": "ESTJ",
+      "actividades": "Organizar procesos legales y supervisar requisitos regulatorios."
+    },
+    {
+      "titulo": "Derechos humanos",
+      "preferencias_ilustrativas": "INFP",
+      "actividades": "Apoyar proyectos de promoción, defensa y divulgación de derechos."
+    },
+    {
+      "titulo": "Políticas públicas",
+      "preferencias_ilustrativas": "INTJ",
+      "actividades": "Evaluar regulaciones y diseñar propuestas institucionales."
+    },
+    {
+      "titulo": "Relaciones institucionales",
+      "preferencias_ilustrativas": "ESFJ",
+      "actividades": "Coordinar interlocución y programas de información legal."
+    },
+    {
+      "titulo": "Asistencia jurídica comunitaria",
+      "preferencias_ilustrativas": "ISFJ",
+      "actividades": "Acompañar procesos de orientación, trámites y seguimiento."
+    },
+    {
+      "titulo": "Gestión de asuntos jurídicos",
+      "preferencias_ilustrativas": "ESTP",
+      "actividades": "Atender procesos y resolver incidencias operativas."
+    }
+  ],
+  "Comunicación": [
+    {
+      "titulo": "Redacción y edición",
+      "preferencias_ilustrativas": "INFP",
+      "actividades": "Desarrollar y revisar textos para distintos públicos."
+    },
+    {
+      "titulo": "Comunicación organizacional",
+      "preferencias_ilustrativas": "ESTJ",
+      "actividades": "Coordinar mensajes internos y planes de comunicación."
+    },
+    {
+      "titulo": "Relaciones públicas",
+      "preferencias_ilustrativas": "ENFJ",
+      "actividades": "Organizar vocerías, redes de colaboración y eventos."
+    },
+    {
+      "titulo": "Periodismo de investigación",
+      "preferencias_ilustrativas": "INTP",
+      "actividades": "Verificar fuentes y analizar información para reportajes."
+    },
+    {
+      "titulo": "Producción audiovisual",
+      "preferencias_ilustrativas": "ISFP",
+      "actividades": "Crear materiales audiovisuales y narrativas visuales."
+    },
+    {
+      "titulo": "Estrategia de contenidos",
+      "preferencias_ilustrativas": "ENFP",
+      "actividades": "Diseñar campañas y conectar ideas con audiencias."
+    },
+    {
+      "titulo": "Analítica de audiencias",
+      "preferencias_ilustrativas": "INTJ",
+      "actividades": "Interpretar datos de comunicación para mejorar contenidos."
+    },
+    {
+      "titulo": "Gestión de comunidades",
+      "preferencias_ilustrativas": "ESFJ",
+      "actividades": "Facilitar conversaciones y proyectos con comunidades."
+    },
+    {
+      "titulo": "Cobertura de eventos",
+      "preferencias_ilustrativas": "ESFP",
+      "actividades": "Comunicar experiencias y generar contenido en directo."
+    },
+    {
+      "titulo": "Comunicación de crisis",
+      "preferencias_ilustrativas": "ENTJ",
+      "actividades": "Coordinar respuestas y mensajes bajo presión."
+    }
+  ],
+  "Turismo": [
+    {
+      "titulo": "Operación hotelera",
+      "preferencias_ilustrativas": "ESTJ",
+      "actividades": "Organizar servicios y procesos de alojamiento."
+    },
+    {
+      "titulo": "Guía cultural y de visitantes",
+      "preferencias_ilustrativas": "ESFP",
+      "actividades": "Acompañar recorridos y compartir contexto cultural."
+    },
+    {
+      "titulo": "Planeación de destinos",
+      "preferencias_ilustrativas": "INTJ",
+      "actividades": "Analizar flujos turísticos y elaborar planes de desarrollo."
+    },
+    {
+      "titulo": "Diseño de experiencias turísticas",
+      "preferencias_ilustrativas": "ENFP",
+      "actividades": "Crear recorridos y experiencias para diferentes públicos."
+    },
+    {
+      "titulo": "Turismo sostenible",
+      "preferencias_ilustrativas": "INFP",
+      "actividades": "Proponer actividades sensibles al patrimonio y entorno."
+    },
+    {
+      "titulo": "Logística de viajes",
+      "preferencias_ilustrativas": "ISTJ",
+      "actividades": "Coordinar itinerarios, reservas y proveedores."
+    },
+    {
+      "titulo": "Atención a huéspedes",
+      "preferencias_ilustrativas": "ESFJ",
+      "actividades": "Resolver solicitudes y mejorar la experiencia de visitantes."
+    },
+    {
+      "titulo": "Investigación turística",
+      "preferencias_ilustrativas": "INTP",
+      "actividades": "Estudiar tendencias, mercados y patrones de viaje."
+    },
+    {
+      "titulo": "Coordinación de grupos",
+      "preferencias_ilustrativas": "ENFJ",
+      "actividades": "Facilitar actividades de grupos y equipos de servicio."
+    },
+    {
+      "titulo": "Operación en campo",
+      "preferencias_ilustrativas": "ESTP",
+      "actividades": "Atender imprevistos y ajustar actividades rápidamente."
+    }
+  ],
+  "Psicología": [
+    {
+      "titulo": "Investigación psicológica",
+      "preferencias_ilustrativas": "INTP",
+      "actividades": "Plantear estudios, interpretar literatura y analizar datos."
+    },
+    {
+      "titulo": "Psicología educativa",
+      "preferencias_ilustrativas": "ENFJ",
+      "actividades": "Participar en estrategias de aprendizaje y acompañamiento."
+    },
+    {
+      "titulo": "Proyectos comunitarios",
+      "preferencias_ilustrativas": "INFJ",
+      "actividades": "Diseñar programas de bienestar y apoyo comunitario."
+    },
+    {
+      "titulo": "Desarrollo organizacional",
+      "preferencias_ilustrativas": "ENTJ",
+      "actividades": "Colaborar en iniciativas de clima y desarrollo de equipos."
+    },
+    {
+      "titulo": "Evaluación y medición",
+      "preferencias_ilustrativas": "ISTJ",
+      "actividades": "Aplicar protocolos validados bajo supervisión competente."
+    },
+    {
+      "titulo": "Divulgación preventiva",
+      "preferencias_ilustrativas": "ENFP",
+      "actividades": "Crear materiales de promoción del bienestar."
+    },
+    {
+      "titulo": "Apoyo psicoeducativo",
+      "preferencias_ilustrativas": "ISFJ",
+      "actividades": "Colaborar en orientación educativa dentro del ámbito autorizado."
+    },
+    {
+      "titulo": "Evaluación de programas",
+      "preferencias_ilustrativas": "INTJ",
+      "actividades": "Examinar resultados e indicadores de intervenciones."
+    },
+    {
+      "titulo": "Trabajo grupal",
+      "preferencias_ilustrativas": "ESFJ",
+      "actividades": "Facilitar actividades y proyectos de apoyo entre pares."
+    },
+    {
+      "titulo": "Divulgación científica",
+      "preferencias_ilustrativas": "INFP",
+      "actividades": "Comunicar investigaciones a públicos no especializados."
+    }
+  ],
+  "Inglés": [
+    {
+      "titulo": "Docencia del inglés",
+      "preferencias_ilustrativas": "ENFJ",
+      "actividades": "Diseñar experiencias de aprendizaje del idioma."
+    },
+    {
+      "titulo": "Traducción escrita",
+      "preferencias_ilustrativas": "ISTJ",
+      "actividades": "Revisar terminología y traducir documentos."
+    },
+    {
+      "titulo": "Interpretación bilingüe",
+      "preferencias_ilustrativas": "ENTP",
+      "actividades": "Facilitar el intercambio de mensajes entre idiomas."
+    },
+    {
+      "titulo": "Edición de materiales bilingües",
+      "preferencias_ilustrativas": "INTP",
+      "actividades": "Revisar contenido y coherencia de textos en inglés."
+    },
+    {
+      "titulo": "Comunicación internacional",
+      "preferencias_ilustrativas": "ENFP",
+      "actividades": "Elaborar contenidos para públicos interculturales."
+    },
+    {
+      "titulo": "Materiales didácticos",
+      "preferencias_ilustrativas": "INFJ",
+      "actividades": "Diseñar recursos para enseñanza de lenguas."
+    },
+    {
+      "titulo": "Coordinación académica",
+      "preferencias_ilustrativas": "ESTJ",
+      "actividades": "Administrar cursos y proyectos educativos."
+    },
+    {
+      "titulo": "Localización de contenidos",
+      "preferencias_ilustrativas": "ISFP",
+      "actividades": "Adaptar mensajes culturales para diferentes mercados."
+    },
+    {
+      "titulo": "Experiencias interculturales",
+      "preferencias_ilustrativas": "ESFP",
+      "actividades": "Guiar visitantes e intercambiar información cultural."
+    },
+    {
+      "titulo": "Atención bilingüe",
+      "preferencias_ilustrativas": "ESFJ",
+      "actividades": "Acompañar usuarios en servicios multilingües."
+    }
+  ],
+  "Economía y Finanzas": [
+    {
+      "titulo": "Análisis financiero",
+      "preferencias_ilustrativas": "INTJ",
+      "actividades": "Analizar indicadores y construir escenarios financieros."
+    },
+    {
+      "titulo": "Auditoría y control",
+      "preferencias_ilustrativas": "ISTJ",
+      "actividades": "Revisar registros y fortalecer controles internos."
+    },
+    {
+      "titulo": "Planeación presupuestal",
+      "preferencias_ilustrativas": "ESTJ",
+      "actividades": "Organizar presupuestos y dar seguimiento a resultados."
+    },
+    {
+      "titulo": "Investigación económica",
+      "preferencias_ilustrativas": "INTP",
+      "actividades": "Analizar datos e interpretar tendencias económicas."
+    },
+    {
+      "titulo": "Educación financiera",
+      "preferencias_ilustrativas": "ENFJ",
+      "actividades": "Explicar conceptos económicos a diferentes públicos."
+    },
+    {
+      "titulo": "Gestión de riesgos",
+      "preferencias_ilustrativas": "ISFJ",
+      "actividades": "Ayudar a documentar controles y riesgos operativos."
+    },
+    {
+      "titulo": "Emprendimiento y modelos de negocio",
+      "preferencias_ilustrativas": "ENTP",
+      "actividades": "Explorar proyectos y evaluar oportunidades comerciales."
+    },
+    {
+      "titulo": "Comunicación económica",
+      "preferencias_ilustrativas": "ENFP",
+      "actividades": "Traducir temas económicos a materiales divulgativos."
+    },
+    {
+      "titulo": "Atención de servicios financieros",
+      "preferencias_ilustrativas": "ESFJ",
+      "actividades": "Acompañar consultas sobre productos y procesos."
+    },
+    {
+      "titulo": "Operación financiera",
+      "preferencias_ilustrativas": "ESTP",
+      "actividades": "Coordinar actividades financieras de respuesta rápida."
+    }
+  ]
+}

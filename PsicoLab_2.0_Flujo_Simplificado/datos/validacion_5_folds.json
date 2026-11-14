@@ -1,0 +1,435 @@
+{
+  "protocol": "StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=20261113); grupos=patrón completo de 20 respuestas; evita patrones idénticos entre entrenamiento y validación",
+  "source": "12,000 respuestas sintéticas; etiquetas del instrumento, NO diagnósticos reales",
+  "model": "MLPClassifier(20,64,32,16), ReLU, Adam, early stopping, 350 iteraciones máx",
+  "features": [
+    "R01",
+    "R02",
+    "R03",
+    "R04",
+    "R05",
+    "R06",
+    "R07",
+    "R08",
+    "R09",
+    "R10",
+    "R11",
+    "R12",
+    "R13",
+    "R14",
+    "R15",
+    "R16",
+    "R17",
+    "R18",
+    "R19",
+    "R20"
+  ],
+  "n_records": 12000,
+  "n_unique_patterns": 11057,
+  "folds": [
+    {
+      "fold": 1,
+      "train_size": 9600,
+      "test_size": 2400,
+      "test_unique_patterns": 2210,
+      "train_unique_patterns": 8847,
+      "accuracy": 1.0,
+      "f1_macro": 1.0,
+      "iterations": 29,
+      "mean_model_score": 0.8328313231468201
+    },
+    {
+      "fold": 2,
+      "train_size": 9600,
+      "test_size": 2400,
+      "test_unique_patterns": 2211,
+      "train_unique_patterns": 8846,
+      "accuracy": 1.0,
+      "f1_macro": 1.0,
+      "iterations": 29,
+      "mean_model_score": 0.8480613231658936
+    },
+    {
+      "fold": 3,
+      "train_size": 9600,
+      "test_size": 2400,
+      "test_unique_patterns": 2212,
+      "train_unique_patterns": 8845,
+      "accuracy": 1.0,
+      "f1_macro": 1.0,
+      "iterations": 30,
+      "mean_model_score": 0.9100809693336487
+    },
+    {
+      "fold": 4,
+      "train_size": 9600,
+      "test_size": 2400,
+      "test_unique_patterns": 2212,
+      "train_unique_patterns": 8845,
+      "accuracy": 1.0,
+      "f1_macro": 1.0,
+      "iterations": 29,
+      "mean_model_score": 0.849592924118042
+    },
+    {
+      "fold": 5,
+      "train_size": 9600,
+      "test_size": 2400,
+      "test_unique_patterns": 2212,
+      "train_unique_patterns": 8845,
+      "accuracy": 1.0,
+      "f1_macro": 1.0,
+      "iterations": 29,
+      "mean_model_score": 0.8375785946846008
+    }
+  ],
+  "summary": {
+    "accuracy_mean": 1.0,
+    "accuracy_std": 0.0,
+    "f1_macro_mean": 1.0,
+    "f1_macro_std": 0.0,
+    "all_folds_accuracy": 1.0,
+    "all_folds_f1_macro": 1.0
+  },
+  "threshold_evaluation": [
+    {
+      "threshold": 0.5,
+      "selected": 11929,
+      "n_total": 12000,
+      "coverage": 0.9940833333333333,
+      "accuracy_selected": 1.0,
+      "errors_selected": 0
+    },
+    {
+      "threshold": 0.6,
+      "selected": 11618,
+      "n_total": 12000,
+      "coverage": 0.9681666666666666,
+      "accuracy_selected": 1.0,
+      "errors_selected": 0
+    },
+    {
+      "threshold": 0.7,
+      "selected": 10731,
+      "n_total": 12000,
+      "coverage": 0.89425,
+      "accuracy_selected": 1.0,
+      "errors_selected": 0
+    },
+    {
+      "threshold": 0.8,
+      "selected": 8633,
+      "n_total": 12000,
+      "coverage": 0.7194166666666667,
+      "accuracy_selected": 1.0,
+      "errors_selected": 0
+    },
+    {
+      "threshold": 0.9,
+      "selected": 4853,
+      "n_total": 12000,
+      "coverage": 0.40441666666666665,
+      "accuracy_selected": 1.0,
+      "errors_selected": 0
+    },
+    {
+      "threshold": 0.95,
+      "selected": 2806,
+      "n_total": 12000,
+      "coverage": 0.23383333333333334,
+      "accuracy_selected": 1.0,
+      "errors_selected": 0
+    },
+    {
+      "threshold": 0.99,
+      "selected": 1914,
+      "n_total": 12000,
+      "coverage": 0.1595,
+      "accuracy_selected": 1.0,
+      "errors_selected": 0
+    }
+  ],
+  "threshold_by_fold": [
+    {
+      "fold": 1,
+      "threshold": 0.5,
+      "n": 2400,
+      "accepted": 2369,
+      "coverage": 0.9870833333333333,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 1,
+      "threshold": 0.6,
+      "n": 2400,
+      "accepted": 2273,
+      "coverage": 0.9470833333333334,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 1,
+      "threshold": 0.7,
+      "n": 2400,
+      "accepted": 2032,
+      "coverage": 0.8466666666666667,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 1,
+      "threshold": 0.8,
+      "n": 2400,
+      "accepted": 1557,
+      "coverage": 0.64875,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 1,
+      "threshold": 0.9,
+      "n": 2400,
+      "accepted": 798,
+      "coverage": 0.3325,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 1,
+      "threshold": 0.95,
+      "n": 2400,
+      "accepted": 516,
+      "coverage": 0.215,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 1,
+      "threshold": 0.99,
+      "n": 2400,
+      "accepted": 287,
+      "coverage": 0.11958333333333333,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 2,
+      "threshold": 0.5,
+      "n": 2400,
+      "accepted": 2386,
+      "coverage": 0.9941666666666666,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 2,
+      "threshold": 0.6,
+      "n": 2400,
+      "accepted": 2320,
+      "coverage": 0.9666666666666667,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 2,
+      "threshold": 0.7,
+      "n": 2400,
+      "accepted": 2146,
+      "coverage": 0.8941666666666667,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 2,
+      "threshold": 0.8,
+      "n": 2400,
+      "accepted": 1655,
+      "coverage": 0.6895833333333333,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 2,
+      "threshold": 0.9,
+      "n": 2400,
+      "accepted": 875,
+      "coverage": 0.3645833333333333,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 2,
+      "threshold": 0.95,
+      "n": 2400,
+      "accepted": 505,
+      "coverage": 0.21041666666666667,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 2,
+      "threshold": 0.99,
+      "n": 2400,
+      "accepted": 400,
+      "coverage": 0.16666666666666666,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 3,
+      "threshold": 0.5,
+      "n": 2400,
+      "accepted": 2399,
+      "coverage": 0.9995833333333334,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 3,
+      "threshold": 0.6,
+      "n": 2400,
+      "accepted": 2395,
+      "coverage": 0.9979166666666667,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 3,
+      "threshold": 0.7,
+      "n": 2400,
+      "accepted": 2359,
+      "coverage": 0.9829166666666667,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 3,
+      "threshold": 0.8,
+      "n": 2400,
+      "accepted": 2206,
+      "coverage": 0.9191666666666667,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 3,
+      "threshold": 0.9,
+      "n": 2400,
+      "accepted": 1473,
+      "coverage": 0.61375,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 3,
+      "threshold": 0.95,
+      "n": 2400,
+      "accepted": 777,
+      "coverage": 0.32375,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 3,
+      "threshold": 0.99,
+      "n": 2400,
+      "accepted": 449,
+      "coverage": 0.18708333333333332,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 4,
+      "threshold": 0.5,
+      "n": 2400,
+      "accepted": 2391,
+      "coverage": 0.99625,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 4,
+      "threshold": 0.6,
+      "n": 2400,
+      "accepted": 2326,
+      "coverage": 0.9691666666666666,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 4,
+      "threshold": 0.7,
+      "n": 2400,
+      "accepted": 2136,
+      "coverage": 0.89,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 4,
+      "threshold": 0.8,
+      "n": 2400,
+      "accepted": 1649,
+      "coverage": 0.6870833333333334,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 4,
+      "threshold": 0.9,
+      "n": 2400,
+      "accepted": 911,
+      "coverage": 0.37958333333333333,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 4,
+      "threshold": 0.95,
+      "n": 2400,
+      "accepted": 516,
+      "coverage": 0.215,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 4,
+      "threshold": 0.99,
+      "n": 2400,
+      "accepted": 401,
+      "coverage": 0.16708333333333333,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 5,
+      "threshold": 0.5,
+      "n": 2400,
+      "accepted": 2384,
+      "coverage": 0.9933333333333333,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 5,
+      "threshold": 0.6,
+      "n": 2400,
+      "accepted": 2304,
+      "coverage": 0.96,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 5,
+      "threshold": 0.7,
+      "n": 2400,
+      "accepted": 2058,
+      "coverage": 0.8575,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 5,
+      "threshold": 0.8,
+      "n": 2400,
+      "accepted": 1566,
+      "coverage": 0.6525,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 5,
+      "threshold": 0.9,
+      "n": 2400,
+      "accepted": 796,
+      "coverage": 0.33166666666666667,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 5,
+      "threshold": 0.95,
+      "n": 2400,
+      "accepted": 492,
+      "coverage": 0.205,
+      "accuracy_selected": 1.0
+    },
+    {
+      "fold": 5,
+      "threshold": 0.99,
+      "n": 2400,
+      "accepted": 377,
+      "coverage": 0.15708333333333332,
+      "accuracy_selected": 1.0
+    }
+  ],
+  "note": "Los umbrales son sobre la puntuación softmax del modelo (no representan probabilidad psicológica calibrada). La exactitud seleccionada solo se calcula entre casos con confianza mayor/igual al umbral. No implica validez externa."
+}

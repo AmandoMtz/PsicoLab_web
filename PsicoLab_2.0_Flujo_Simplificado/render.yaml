@@ -1,0 +1,18 @@
+# Primera publicación: prueba gratuita, sin recopilación de respuestas.
+services:
+  - type: web
+    name: psicolab-web
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-web.txt
+    startCommand: uvicorn web.app:app --host 0.0.0.0 --port $PORT --workers 1 --no-access-log
+    healthCheckPath: /api/salud
+    envVars:
+      - key: PSICOLAB_GUARDAR_DESDE
+        value: "2026-11-19T00:00"
+      - key: PSICOLAB_GUARDAR_HASTA
+        value: "2026-11-19T18:30"
+      - key: OPENBLAS_NUM_THREADS
+        value: "1"
+      - key: OMP_NUM_THREADS
+        value: "1"

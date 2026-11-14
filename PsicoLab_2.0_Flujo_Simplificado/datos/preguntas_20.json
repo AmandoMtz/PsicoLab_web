@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "dimension": "E/I",
+    "question": "Cuando estás en una reunión con personas que conoces poco, normalmente prefieres:",
+    "A": "Integrarte a las conversaciones desde el principio.",
+    "B": "Familiarizarte con el ambiente antes de participar en una conversación.",
+    "pole_A": "E",
+    "pole_B": "I"
+  },
+  {
+    "id": 2,
+    "dimension": "E/I",
+    "question": "Después de pasar varias horas interactuando con otras personas, generalmente prefieres:",
+    "A": "Dedicar un tiempo a actividades individuales.",
+    "B": "Continuar compartiendo tiempo con otras personas.",
+    "pole_A": "I",
+    "pole_B": "E"
+  },
+  {
+    "id": 3,
+    "dimension": "E/I",
+    "question": "Cuando tienes una idea interesante, generalmente prefieres:",
+    "A": "Conversar sobre ella mientras organizas tus pensamientos.",
+    "B": "Organizar tus pensamientos antes de conversar sobre ella.",
+    "pole_A": "E",
+    "pole_B": "I"
+  },
+  {
+    "id": 4,
+    "dimension": "E/I",
+    "question": "Cuando participas en una actividad nueva que te interesa, prefieres:",
+    "A": "Explorarla por tu cuenta antes de compartir la experiencia.",
+    "B": "Explorarla interactuando con otras personas.",
+    "pole_A": "I",
+    "pole_B": "E"
+  },
+  {
+    "id": 5,
+    "dimension": "E/I",
+    "question": "Cuando participas en un equipo nuevo, prefieres:",
+    "A": "Intercambiar ideas desde el inicio para conocer al grupo.",
+    "B": "Escuchar las primeras propuestas antes de compartir tus ideas.",
+    "pole_A": "E",
+    "pole_B": "I"
+  },
+  {
+    "id": 6,
+    "dimension": "S/N",
+    "question": "Cuando comienzas a aprender un tema nuevo, prefieres:",
+    "A": "Revisar ejemplos específicos para comprender cómo funciona.",
+    "B": "Conocer primero las ideas generales que explican el tema.",
+    "pole_A": "S",
+    "pole_B": "N"
+  },
+  {
+    "id": 7,
+    "dimension": "S/N",
+    "question": "Cuando analizas un problema que no conoces, primero prefieres:",
+    "A": "Identificar relaciones y patrones que puedan explicar el problema.",
+    "B": "Identificar la información disponible y los aspectos específicos del problema.",
+    "pole_A": "N",
+    "pole_B": "S"
+  },
+  {
+    "id": 8,
+    "dimension": "S/N",
+    "question": "Cuando alguien te explica un proyecto, te interesa conocer primero:",
+    "A": "Los datos específicos y las características de lo que se propone.",
+    "B": "Las ideas centrales y las posibilidades que plantea.",
+    "pole_A": "S",
+    "pole_B": "N"
+  },
+  {
+    "id": 9,
+    "dimension": "S/N",
+    "question": "Cuando recibes información sobre un tema, generalmente prefieres:",
+    "A": "Identificar patrones y relaciones entre las ideas.",
+    "B": "Examinar los datos y ejemplos que se presentan.",
+    "pole_A": "N",
+    "pole_B": "S"
+  },
+  {
+    "id": 10,
+    "dimension": "S/N",
+    "question": "Cuando buscas comprender una situación compleja, prefieres:",
+    "A": "Explorar distintas interpretaciones y conexiones posibles.",
+    "B": "Examinar los hechos y ejemplos disponibles.",
+    "pole_A": "N",
+    "pole_B": "S"
+  },
+  {
+    "id": 11,
+    "dimension": "T/F",
+    "question": "Cuando debes elegir entre dos alternativas importantes, normalmente das mayor peso a:",
+    "A": "La consistencia de los criterios utilizados para compararlas.",
+    "B": "La congruencia de la elección con tus valores personales.",
+    "pole_A": "T",
+    "pole_B": "F"
+  },
+  {
+    "id": 12,
+    "dimension": "T/F",
+    "question": "Cuando existen diferentes opiniones en un equipo, para decidir qué hacer prefieres:",
+    "A": "Considerar cómo cada propuesta afectaría a las personas involucradas.",
+    "B": "Comparar las propuestas utilizando criterios previamente acordados.",
+    "pole_A": "F",
+    "pole_B": "T"
+  },
+  {
+    "id": 13,
+    "dimension": "T/F",
+    "question": "Cuando debes recomendar una solución ante una situación que afecta a varias personas, prefieres basar tu recomendación principalmente en:",
+    "A": "Criterios que puedan aplicarse de manera consistente.",
+    "B": "Las necesidades particulares de las personas involucradas.",
+    "pole_A": "T",
+    "pole_B": "F"
+  },
+  {
+    "id": 14,
+    "dimension": "T/F",
+    "question": "Cuando colaboras en una decisión de grupo y las alternativas tienen ventajas similares, prefieres dar prioridad a:",
+    "A": "La alternativa más congruente con los valores compartidos por el grupo.",
+    "B": "La alternativa que mejor cumple los criterios establecidos.",
+    "pole_A": "F",
+    "pole_B": "T"
+  },
+  {
+    "id": 15,
+    "dimension": "T/F",
+    "question": "Cuando dos propuestas parecen igualmente viables, prefieres:",
+    "A": "Seleccionar la que mejor cumple criterios previamente definidos.",
+    "B": "Seleccionar la que mejor considera las necesidades y valores involucrados.",
+    "pole_A": "T",
+    "pole_B": "F"
+  },
+  {
+    "id": 16,
+    "dimension": "J/P",
+    "question": "Al comenzar un proyecto, te resulta más cómodo:",
+    "A": "Definir una estructura inicial para organizar las actividades.",
+    "B": "Mantener varias alternativas de organización mientras avanzas.",
+    "pole_A": "J",
+    "pole_B": "P"
+  },
+  {
+    "id": 17,
+    "dimension": "J/P",
+    "question": "Cuando realizas un viaje, generalmente prefieres:",
+    "A": "Elegir las actividades durante el viaje según las circunstancias.",
+    "B": "Llevar un itinerario con las actividades previstas.",
+    "pole_A": "P",
+    "pole_B": "J"
+  },
+  {
+    "id": 18,
+    "dimension": "J/P",
+    "question": "Cuando tienes varias actividades por realizar, te resulta más cómodo:",
+    "A": "Seguir una secuencia de actividades previamente definida.",
+    "B": "Alternar entre actividades según las necesidades del momento.",
+    "pole_A": "J",
+    "pole_B": "P"
+  },
+  {
+    "id": 19,
+    "dimension": "J/P",
+    "question": "Cuando cambia inesperadamente una actividad que tenías prevista, prefieres:",
+    "A": "Decidir cómo continuar conforme cambia la situación.",
+    "B": "Establecer un nuevo plan para continuar.",
+    "pole_A": "P",
+    "pole_B": "J"
+  },
+  {
+    "id": 20,
+    "dimension": "J/P",
+    "question": "Cuando comienzas una actividad que admite varias formas de realizarse, prefieres:",
+    "A": "Ajustar el procedimiento conforme descubres nuevas posibilidades.",
+    "B": "Definir los pasos principales antes de comenzar.",
+    "pole_A": "P",
+    "pole_B": "J"
+  }
+]

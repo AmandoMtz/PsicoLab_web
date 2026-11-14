@@ -1,0 +1,309 @@
+/* Réplica del diseño de app_psicolab.py (Tkinter, tema clam, ventana de 1160×850).
+   Los tamaños de letra usan los mismos puntos que Tkinter (var(--pt) = 1 punto de Tkinter). */
+
+@font-face {
+  font-family: 'PsicoLab Sans';
+  src: local('DejaVu Sans'), local('DejaVuSans'), url('/fuentes/DejaVuSans.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PsicoLab Sans';
+  src: local('DejaVu Sans Bold'), local('DejaVuSans-Bold'), url('/fuentes/DejaVuSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --fondo: #ECECEC;
+  --blanco: #FFFFFF;
+  --marino: #1F2540;
+  --amarillo: #F7D500;
+  --rosa: #F28AC2;
+  --rosa-claro: #FCE0EF;
+  --naranja: #FF6A33;
+  --naranja-claro: #FFE1D6;
+  --azul: #1E73E8;
+  --azul-activo: #175FC1;
+  --azul-claro: #D9E9FF;
+  --verde: #08B850;
+  --verde-claro: #D9F8E6;
+  --gris: #737373;
+  --linea: #D9D9D9;
+  --exito: #0D8F46;
+  --aviso: #C94A2E;
+  /* Tema clam de Tkinter */
+  --clam-borde: #9E9A91;
+  --clam-luz: #EEEBE7;
+  --clam-sombra: #CFCDC8;
+  --clam-fondo: #DCDAD5;
+  --clam-canal: #BAB5AB;
+  --clam-progreso: #E8E5DB;
+  /* Tkinter dibujó las capturas a 1.397 px por punto (no a 1.333 como CSS). */
+  --pt: 1.397px;
+  font-family: 'PsicoLab Sans', 'DejaVu Sans', Verdana, sans-serif;
+  font-size: calc(11 * var(--pt));
+  /* Tkinter redondea el avance de cada letra en tamaños pequeños; esto lo iguala. */
+  letter-spacing: 0.1px;
+  color: var(--marino);
+}
+.marca, .titulo-pantalla, .bienvenida h1, .texto-consentimiento h2 { letter-spacing: 0; }
+.chip, .etiqueta, .panel-trabajos h2 { letter-spacing: 0; }
+.boton, .campo label, .pregunta-texto, .dimension, .trabajo h3, .panel-tarjeta .nombre { letter-spacing: -0.09px; }
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--fondo); display: flex; flex-direction: column; }
+h1, h2, h3, p { margin: 0; font-size: inherit; }
+
+/* Cabecera amarilla (100 px de alto, como en escritorio) */
+.cabecera { position: relative; flex: 0 0 100px; background: var(--amarillo); overflow: hidden; }
+.marca { font-size: calc(24 * var(--pt)); font-weight: 700; padding: 15px 0 0 31px; }
+.lema { font-size: calc(10 * var(--pt)); padding: 5px 0 0 32px; }
+.puntos { position: absolute; right: 32px; bottom: 0; display: flex; }
+.puntos span { width: 11px; height: 11px; margin: 1px 5px; border-radius: 50%; }
+.puntos span:nth-child(1) { background: var(--rosa); }
+.puntos span:nth-child(2) { background: var(--naranja); }
+.puntos span:nth-child(3) { background: var(--azul); }
+.puntos span:nth-child(4) { background: var(--verde); }
+
+/* Área bajo la cabecera: cada pantalla ocupa todo el espacio disponible */
+.contenido { flex: 1 1 0; min-height: 0; overflow: auto; display: flex; flex-direction: column; }
+.pantalla { flex: 1 0 auto; display: flex; flex-direction: column; }
+.panel { flex: 1 0 auto; display: flex; flex-direction: column; background: var(--blanco); border: 1px solid var(--linea); }
+.franja { flex: none; }
+.franja-amarilla { background: var(--amarillo); }
+.franja-rosa { background: var(--rosa); }
+.titulo-pantalla { font-weight: 700; }
+.gris { color: var(--gris); }
+.cargando { margin: auto; color: var(--gris); }
+
+/* Botones planos de escritorio (bd=0, padx=22, pady=12, letra 11 negrita) */
+.boton {
+  font: inherit;
+  font-size: calc(11 * var(--pt));
+  font-weight: 700;
+  line-height: normal;
+  padding: 13px 23px 14px;
+  border: 1px solid var(--linea);
+  border-radius: 0;
+  cursor: pointer;
+}
+.boton:focus-visible { outline: 2px solid var(--marino); outline-offset: 1px; }
+.boton:disabled { cursor: wait; }
+.boton-primario { background: var(--azul); color: var(--blanco); }
+.boton-primario:active { background: var(--azul-activo); }
+.boton-secundario { background: var(--azul-claro); color: var(--marino); }
+.boton-naranja { background: var(--naranja); color: var(--blanco); }
+.boton-verde { background: var(--verde); color: var(--blanco); }
+.boton-marino { background: var(--marino); color: var(--blanco); }
+.acciones { display: flex; justify-content: space-between; align-items: flex-start; }
+
+/* Barras de desplazamiento del tema clam (Chrome y Edge; otros navegadores usan las suyas) */
+.desplazable { overflow-y: scroll; }
+.desplazable::-webkit-scrollbar { width: 15px; }
+.desplazable::-webkit-scrollbar-track { background: var(--clam-canal); border: 1px solid var(--clam-borde); }
+.desplazable::-webkit-scrollbar-thumb,
+.desplazable::-webkit-scrollbar-button:single-button {
+  background-color: var(--clam-fondo);
+  border: 1px solid var(--clam-borde);
+  box-shadow: inset 1px 1px var(--clam-luz), inset -1px -1px var(--clam-sombra);
+}
+.desplazable::-webkit-scrollbar-thumb {
+  background-image: repeating-linear-gradient(var(--clam-borde) 0 1px, transparent 1px 2px);
+  background-size: 9px 7px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.desplazable.sin-desborde::-webkit-scrollbar-track {
+  background-color: var(--clam-fondo);
+  box-shadow: inset 1px 1px var(--clam-luz), inset -1px -1px var(--clam-sombra);
+  background-image: repeating-linear-gradient(var(--clam-borde) 0 1px, transparent 1px 2px);
+  background-size: 9px 7px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.desplazable::-webkit-scrollbar-button:single-button { display: block; height: 15px; background-repeat: no-repeat; background-position: center; }
+.desplazable::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath d='M0 5h9L4.5 0z'/%3E%3C/svg%3E");
+}
+.desplazable::-webkit-scrollbar-button:single-button:vertical:increment {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath d='M0 0h9L4.5 5z'/%3E%3C/svg%3E");
+}
+
+/* 1. Inicio */
+.p-inicio { padding: 35px 50px; }
+.p-inicio .franja { height: 18px; }
+.bienvenida { display: flex; flex-direction: column; align-items: center; }
+.bienvenida h1 { font-size: calc(26 * var(--pt)); font-weight: 700; margin: 74px 36px 20px; text-align: center; }
+.descripcion { max-width: 882px; margin: 0 46px 23px; font-size: calc(12 * var(--pt)); color: var(--gris); }
+.chips { display: flex; margin: 6px 0 31px; }
+.chip { font-size: calc(10 * var(--pt)); font-weight: 700; line-height: 17px; padding: 9px 14px; margin: 0 9px; color: var(--blanco); }
+.chip-amarillo { background: var(--amarillo); color: var(--marino); }
+.chip-rosa { background: var(--rosa); }
+.chip-azul { background: var(--azul); }
+.bienvenida .nota { font-size: calc(10 * var(--pt)); color: var(--gris); margin: 0 31px 27px; text-align: center; }
+
+/* 2. Consentimiento */
+.p-consentimiento { flex: 1 1 0; min-height: 360px; padding: 18px 26px; }
+.p-consentimiento .titulo-pantalla { font-size: calc(21 * var(--pt)); margin: 3px 1px 15px; }
+.p-consentimiento .panel { flex: 1 1 0; min-height: 0; }
+.texto-consentimiento { flex: 1 1 0; min-height: 0; margin: 10px 15px; }
+.texto-consentimiento h2 { font-size: calc(17 * var(--pt)); font-weight: 700; max-width: 952px; margin: 15px 15px 21px; }
+.texto-consentimiento .parrafos { max-width: 892px; margin: 0 15px 21px; line-height: 19px; }
+.texto-consentimiento .parrafos p + p { margin-top: 19px; }
+.pie-panel { flex: none; display: flex; justify-content: space-between; padding: 15px 22px; }
+
+/* 2b. Participación no autorizada */
+.p-rechazo { padding: 35px 40px; }
+.p-rechazo .titulo-pantalla { font-size: calc(22 * var(--pt)); margin: 41px 31px 13px; }
+.p-rechazo .explicacion { max-width: 942px; margin: 0 31px 23px; color: var(--gris); }
+.p-rechazo .acciones { justify-content: flex-start; gap: 10px; margin: 0 30px; }
+
+/* 3. Datos generales */
+.p-datos { padding: 30px 37px; }
+.p-datos .franja { height: 13px; }
+.p-datos .titulo-pantalla { font-size: calc(22 * var(--pt)); margin: 26px 27px 12px; }
+.p-datos .subtitulo { font-size: calc(10 * var(--pt)); color: var(--gris); margin: 0 27px 23px; }
+.campos { margin: 0 26px; }
+.campo label { display: block; font-weight: 700; margin: 15px 1px 9px; }
+.campo select {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 369px;
+  height: 48px;
+  font: inherit;
+  font-size: calc(10 * var(--pt));
+  color: var(--marino);
+  padding: 0 22px 0 9px;
+  border: 1px solid var(--clam-borde);
+  border-radius: 0;
+  cursor: pointer;
+  /* Combobox de solo lectura del tema clam: campo gris con relieve y botón blanco con flecha. */
+  background-color: var(--clam-fondo);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath d='M0 0h9L4.5 5z'/%3E%3C/svg%3E"),
+    linear-gradient(var(--clam-sombra), var(--clam-sombra)),
+    linear-gradient(var(--clam-sombra), var(--clam-sombra)),
+    linear-gradient(var(--clam-luz), var(--clam-luz)),
+    linear-gradient(var(--clam-borde), var(--clam-borde)),
+    linear-gradient(var(--clam-luz), var(--clam-luz)),
+    linear-gradient(var(--clam-luz), var(--clam-luz)),
+    linear-gradient(var(--clam-luz), var(--clam-luz)),
+    linear-gradient(var(--clam-luz), var(--clam-luz)),
+    linear-gradient(var(--blanco), var(--blanco));
+  background-size: 9px 5px, 13px 1px, 1px 100%, 1px 100%, 1px 100%, 1px 100%, 100% 1px, 100% 1px, 1px 100%, 13px 100%;
+  background-position: right 2px center, right 0 bottom, right 0 top, right 12px top, right 13px top,
+    right 14px top, left top, left bottom, left top, right 0 top;
+  background-repeat: no-repeat;
+}
+.p-datos .aviso { font-size: calc(10 * var(--pt)); color: var(--aviso); min-height: 1.164em; margin: 25px 27px 0; }
+.p-datos .acciones { margin: 15px 26px 25px; }
+
+/* 4. Cuestionario */
+.p-cuestionario { flex: 1 1 0; min-height: 420px; padding: 13px 25px; }
+.p-cuestionario .titulo-pantalla { font-size: calc(20 * var(--pt)); margin: 1px 1px 9px; }
+.p-cuestionario .subtitulo { font-size: calc(10 * var(--pt)); color: var(--gris); margin: 0 1px 14px; white-space: pre-wrap; }
+.p-cuestionario .panel { flex: 1 1 0; min-height: 0; }
+/* Columna flexible: así los márgenes no se fusionan, igual que el pady de Tkinter. */
+.lista-preguntas { flex: 1 1 0; min-height: 0; margin: 7px 10px 7px 15px; display: flex; flex-direction: column; }
+.lista-preguntas > * { flex: none; }
+.dimension { font-weight: 700; margin: 20px 17px 11px; }
+.pregunta { margin: 5px 15px; }
+.pregunta-texto { font-weight: 700; margin: 3px 1px 8px; }
+.opcion {
+  display: flex;
+  align-items: center;
+  font-size: calc(10 * var(--pt));
+  line-height: 17px;
+  border: 1px solid var(--linea);
+  padding: 6px 11px 6px 21px;
+  cursor: pointer;
+}
+.opcion input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  margin: 0 6px 0 1px;
+  border: 1px solid;
+  border-color: #999999 #E6E6E6 #E6E6E6 #999999;
+  border-radius: 50%;
+  background: var(--azul-claro);
+}
+.opcion input:checked { background: radial-gradient(circle, var(--marino) 0 2px, var(--azul-claro) 2.5px); }
+.opcion input:focus-visible { outline: 1px dotted var(--marino); outline-offset: 2px; }
+.separador { height: 1px; background: var(--linea); margin: 5px 16px 10px; }
+.pie-cuestionario { flex: none; padding: 6px 20px 13px; }
+.progreso { height: 18px; border: 1px solid var(--clam-borde); padding: 1px; background: var(--clam-progreso); margin-bottom: 7px; }
+.progreso-barra {
+  height: 100%;
+  width: 0;
+  background: var(--azul);
+  border: 1px solid var(--clam-borde);
+  box-shadow: inset 0 1px var(--clam-luz), inset 0 -1px var(--clam-sombra);
+}
+.progreso-texto { font-size: calc(9 * var(--pt)); line-height: 16px; padding-top: 3px; color: var(--gris); text-align: right; margin-right: 1px; }
+.p-cuestionario .aviso { font-size: calc(9 * var(--pt)); line-height: 16px; padding-top: 3px; min-height: 19px; color: var(--aviso); margin-left: 1px; }
+.pie-cuestionario .acciones { margin-top: 7px; }
+.boton-pendiente { background: var(--azul-claro); color: var(--marino); }
+
+/* 5. Resultado. Cada texto mide lo mismo que su etiqueta de Tkinter
+   (alto de línea de la fuente + 2 px arriba y abajo) y los márgenes son su pady. */
+.p-resultado { flex: 1 1 0; min-height: 0; margin: 15px 24px; }
+.p-resultado .titulo-pantalla { font-size: calc(21 * var(--pt)); line-height: 35px; padding: 2px 1px; margin-bottom: 7px; }
+.p-resultado .subtitulo { color: var(--gris); line-height: 19px; padding: 2px 1px; margin-bottom: 15px; }
+.paneles { display: flex; align-items: stretch; }
+.paneles .panel { flex: none; }
+.paneles .franja { height: 12px; }
+.panel-tarjeta { margin-right: 14px; }
+.panel-tarjeta img { display: block; width: 372px; height: auto; margin: 13px 11px 10px; }
+.panel-tarjeta .nombre { font-weight: 700; color: var(--azul); line-height: 19px; padding: 2px 15px; margin: 2px 0 7px; }
+.panel-tarjeta .identificador { font-size: calc(10 * var(--pt)); line-height: 17px; padding: 2px 15px; margin-bottom: 15px; }
+.paneles .panel-trabajos { flex: 1 1 0; }
+.etiqueta { font-size: calc(10 * var(--pt)); font-weight: 700; color: var(--naranja); line-height: 17px; padding: 2px 20px; margin: 18px 0 6px; }
+.panel-trabajos h2 { font-size: calc(13 * var(--pt)); font-weight: 700; line-height: 22px; padding: 2px 20px; margin-bottom: 9px; }
+.trabajo { border: 1px solid; margin: 5px 17px; }
+.trabajo h3 { font-weight: 700; line-height: 19px; padding: 2px 12px; margin: 10px 0 4px; }
+.trabajo p { font-size: calc(10 * var(--pt)); line-height: 17px; padding: 2px 12px; margin-bottom: 11px; }
+.trabajo-1 { background: var(--rosa-claro); border-color: var(--rosa); }
+.trabajo-2 { background: var(--naranja-claro); border-color: var(--naranja); }
+.trabajo-3 { background: var(--verde-claro); border-color: var(--verde); }
+.panel-trabajos .nota { font-size: calc(9 * var(--pt)); color: var(--gris); line-height: 15px; padding: 2px 20px; margin: 9px 0 16px; }
+.p-resultado .acciones { margin: 16px 0 12px; }
+.registro { font-size: calc(9 * var(--pt)); line-height: 15px; }
+.registro p { padding: 2px 1px; }
+.registro .exito { color: var(--exito); }
+.registro .aviso { color: var(--aviso); }
+.registro .codigo { color: var(--gris); margin: 5px 0; }
+.registro .boton { margin: 4px 0 9px; }
+.aviso-ia { font-size: calc(9 * var(--pt)); color: var(--gris); line-height: 15px; padding: 2px 1px; max-width: 952px; margin: 6px 0 20px; }
+
+/* Pantallas angostas (celulares): mismo estilo, acomodado en una columna */
+@media (max-width: 720px) {
+  .marca { padding-left: 16px; }
+  .lema { padding-left: 17px; padding-right: 110px; }
+  .puntos { right: 12px; }
+  .p-inicio, .p-datos, .p-rechazo { padding: 16px 10px; }
+  .p-consentimiento, .p-cuestionario { padding: 12px 10px; }
+  .p-resultado { margin: 12px 10px; }
+  .bienvenida h1 { margin: 40px 12px 14px; }
+  .descripcion { margin: 0 14px 18px; }
+  .chips { flex-wrap: wrap; justify-content: center; gap: 10px 0; }
+  .p-rechazo .titulo-pantalla, .p-rechazo .explicacion { margin-left: 14px; margin-right: 14px; }
+  .p-rechazo .acciones { margin: 0 14px 20px; flex-wrap: wrap; }
+  .p-datos .titulo-pantalla, .p-datos .subtitulo, .p-datos .aviso { margin-left: 14px; margin-right: 14px; }
+  .campos, .p-datos .acciones { margin-left: 14px; margin-right: 14px; }
+  .campo select { width: 100%; }
+  .boton { font-size: calc(10 * var(--pt)); }
+  .acciones { gap: 8px; }
+  .acciones .boton, .pie-panel .boton { padding: 12px 8px; }
+  .pregunta { margin: 5px 4px; }
+  .dimension, .separador { margin-left: 5px; margin-right: 5px; }
+  .pie-cuestionario { padding: 6px 10px 10px; }
+  .paneles { flex-direction: column; }
+  .panel-tarjeta { margin: 0 0 14px; }
+  .panel-tarjeta img { width: calc(100% - 22px); }
+}
