@@ -1,49 +1,20 @@
-/* Capa visual web: conserva la identidad y las tarjetas originales. */
-body { background: radial-gradient(ellipse at top right, #fff5cf 0, transparent 45%), #f3f5fa; }
-.cabecera { box-shadow: 0 3px 18px #1f25400c; }
-.pantalla { animation: entrar .28s ease-out both; }
-.panel { border-radius: 18px; box-shadow: 0 8px 32px #1f254008; overflow: hidden; }
-.boton { border-radius: 12px; min-height: 46px; transition: transform .18s, box-shadow .18s, background-color .18s; }
-.boton:disabled { opacity: .65; }
-.boton:active:not(:disabled) { transform: translateY(1px) scale(.99); }
-.boton:focus-visible, select:focus-visible { outline: 3px solid var(--azul); outline-offset: 3px; }
-.boton-naranja { background: #bc3c10; }
-.boton-verde { background: #067a36; }
-.chip { border-radius: 999px; }
-.chip-rosa { color: var(--marino); }
-.bienvenida .descripcion { line-height: 1.65; }
-.bienvenida .nota { line-height: 1.5; }
-.campo select { border-radius: 10px; background-color: #f8f9fc; }
-.pregunta { border-left: 3px solid transparent; padding-left: 8px; transition: border-color .2s; }
-.pregunta.respondida { border-left-color: #16854d; }
-.opcion { border-radius: 9px; min-height: 44px; margin-bottom: 6px; padding: 10px 12px; gap: 5px; transition: background-color .18s, border-color .18s; }
-.opcion:has(input:checked) { background: #eaf2ff; border-color: var(--azul); }
-.opcion:has(input:focus-visible) { outline: 2px solid var(--azul); outline-offset: 2px; }
-.opcion input { width: 16px; height: 16px; }
-.progreso { border: 0; border-radius: 20px; height: 9px; padding: 0; background: #e5eaf2; }
-.progreso-barra { border: 0; border-radius: inherit; box-shadow: none; background: linear-gradient(90deg, #1e73e8, #7054cc); transition: width .25s ease; }
-.pie-cuestionario { background: #ffffff; border-top: 1px solid #edf0f5; }
-.trabajo { border-radius: 12px; animation: entrar .35s ease-out both; }
-.trabajo-2 { animation-delay: .07s; }
-.trabajo-3 { animation-delay: .14s; }
-.panel-tarjeta img { border-radius: 10px; }
-.codigo { overflow-wrap: anywhere; }
-.desplazable { scrollbar-width: thin; scrollbar-color: #bdc6d6 transparent; }
-@media (hover: hover) {
-  .boton:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 14px #1f25401c; }
-  .opcion:hover { background-color: #f4f7fc; }
+/* Movimiento discreto: no interrumpe la lectura ni las respuestas. */
+.pantalla { animation:aparecer .32s ease-out both; }
+.boton,.opcion,.carrera-opcion { transition:background-color .18s,border-color .18s,box-shadow .18s,transform .18s; }
+.progreso-barra { transition:width .25s ease; }
+.boton:active:not(:disabled) { transform:translateY(1px); }
+.trabajo { animation:aparecer .35s ease-out both; }.trabajo-2 { animation-delay:.06s; }.trabajo-3 { animation-delay:.12s; }
+@media (hover:hover) {
+  .boton:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 16px #29244114; }
+  .opcion:hover,.carrera-opcion:hover { border-color:#a999c3; }
+  .tarjeta-frente:hover { transform:rotate(3deg) translateY(-4px); }
 }
-@media (max-width: 720px) {
-  body { min-height: 100dvh; }
-  .bienvenida h1 { font-size: 29px; }
-  .panel { border-radius: 14px; }
-  .acciones, .pie-panel { flex-wrap: wrap; gap: 10px; }
-  .acciones .boton, .pie-panel .boton { flex: 1 1 140px; }
-  .p-cuestionario .titulo-pantalla { font-size: 23px; }
-  .texto-consentimiento .parrafos { line-height: 1.6; margin-left: 5px; margin-right: 5px; }
-  .panel-tarjeta img { max-width: 372px; margin-left: auto; margin-right: auto; }
+.tarjeta-frente { transition:transform .3s ease; }
+@keyframes aparecer { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
 }
-@keyframes entrar { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+@media print {
+  .cabecera,.recorrido,.pie-sitio,.acciones,.descargar,.registro { display:none; }
+  body { background:white; }.contenido { padding:0; }.paneles { grid-template-columns:260px 1fr; }
 }

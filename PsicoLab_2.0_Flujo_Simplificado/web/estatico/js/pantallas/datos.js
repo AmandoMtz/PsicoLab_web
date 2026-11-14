@@ -3,33 +3,35 @@ import { boton, el, panel, pantalla } from '../ui.js';
 
 function selector(clave, etiqueta, opciones) {
   const select = el('select', { id: clave, required: true },
-    el('option', { value: '', hidden: true }),
+    el('option', { value: '', disabled: true }, 'Selecciona una opción'),
     opciones.map((valor) => el('option', { value: valor }, valor)));
   select.value = estado[clave];
-  select.addEventListener('change', () => {
-    estado[clave] = select.value;
-    estado.resultado = null;
-  });
+  select.addEventListener('change', () => { estado[clave] = select.value; estado.resultado = null; });
   return el('div', { class: 'campo' }, el('label', { for: clave }, `${etiqueta} *`), select);
 }
 
 export function mostrarDatos(contenedor, app) {
-  const { carreras } = app.catalogo;
   const edades = Array.from({ length: EDAD_MAXIMA - EDAD_MINIMA + 1 }, (_, i) => String(EDAD_MINIMA + i));
   const aviso = el('p', { class: 'aviso', role: 'alert' });
+  const carreras = app.catalogo.carreras.map((carrera, i) => el('label', { class: 'carrera-opcion' },
+    el('input', { type: 'radio', name: 'carrera', value: carrera, checked: estado.carrera === carrera,
+      onchange: () => { estado.carrera = carrera; estado.resultado = null; } }),
+    el('span', { class: 'carrera-icono', 'aria-hidden': 'true' }, ['§', '↗', '◎', 'Ψ', 'Aa', '↗'][i % 6]),
+    el('span', {}, carrera)));
   const continuar = () => {
-    if (datosCompletos(carreras)) app.ir('cuestionario');
-    else aviso.textContent = 'Completa edad, sexo y licenciatura o carrera antes de continuar.';
+    if (datosCompletos(app.catalogo.carreras)) app.ir('cuestionario');
+    else {
+      aviso.textContent = 'Completa tu edad, sexo y carrera para continuar.';
+      const pendiente = !estado.edad ? '#edad' : !estado.sexo ? '#sexo' : 'input[name="carrera"]';
+      contenedor.querySelector(pendiente)?.focus();
+    }
   };
-  contenedor.append(pantalla('datos', panel({ franja: 'rosa' },
-    el('h1', { class: 'titulo-pantalla' }, 'Datos generales'),
-    el('p', { class: 'subtitulo' }, 'Selecciona los tres campos obligatorios antes de iniciar el cuestionario.'),
-    el('div', { class: 'campos' },
-      selector('edad', `Edad (${EDAD_MINIMA} a ${EDAD_MAXIMA} años)`, edades),
-      selector('sexo', 'Sexo', SEXOS),
-      selector('carrera', 'Licenciatura o carrera', carreras)),
-    aviso,
-    el('div', { class: 'acciones' },
-      boton('← Consentimiento', () => app.ir('consentimiento')),
-      boton('Ir al cuestionario →', continuar, 'primario')))));
+  contenedor.append(pantalla('datos',
+    el('div', { class: 'encabezado-pagina' }, el('p', { class: 'sobrelinea' }, 'PASO 02 / SOBRE TI'), el('h1', { class: 'titulo-pantalla' }, 'Hagámoslo más personal.'), el('p', { class: 'subtitulo' }, 'Tu carrera nos ayuda a mostrarte áreas profesionales que tengan sentido para ti.')),
+    el('div', { class: 'datos-layout' }, panel({ clase: 'formulario-datos' },
+      el('div', { class: 'campos' }, selector('edad', 'Edad', edades), selector('sexo', 'Sexo', SEXOS)),
+      el('fieldset', { class: 'carreras' }, el('legend', {}, '¿Qué carrera estudias? *'), el('div', { class: 'carreras-grid' }, carreras)),
+      aviso,
+      el('div', { class: 'acciones' }, boton('← Volver', () => app.ir('consentimiento')), boton('Ir a las preguntas →', continuar, 'primario'))),
+      el('aside', { class: 'datos-nota' }, el('span', { class: 'icono-grande', 'aria-hidden': 'true' }, '✦'), el('h2', {}, 'Tu perfil empieza con tus respuestas.'), el('p', {}, 'La IA utiliza únicamente las 20 respuestas del cuestionario. Tu edad, sexo y carrera no cambian el perfil calculado.'), el('p', {}, 'La carrera se utiliza después para elegir tres áreas de trabajo que puedes explorar.'), el('span', { class: 'mini-pill' }, 'Sin nombres ni correos')))));
 }

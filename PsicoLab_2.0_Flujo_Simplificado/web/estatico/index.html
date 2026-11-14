@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#F7D500">
-  <meta name="description" content="Explora tus preferencias con PsicoLab: 20 preguntas y un perfil de inteligencia artificial con fines educativos.">
+  <meta name="theme-color" content="#292441">
+  <meta name="description" content="Conoce el perfil que estima la IA y explora posibilidades relacionadas con tu carrera. Una experiencia educativa de PsicoLab.">
   <title>PsicoLab 2.0 | ¿Puede un algoritmo conocerte?</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/css/estilos.css">
@@ -12,14 +12,16 @@
   <script type="module" src="/js/main.js"></script>
 </head>
 <body>
+  <a class="saltar" href="#app">Saltar al contenido</a>
   <header class="cabecera">
-    <div>
-      <p class="marca">PsicoLab 2.0</p>
-      <p class="lema">¿Puede un algoritmo conocerte? · Actividad exploratoria</p>
+    <div class="cabecera-interior">
+      <div class="identidad"><span class="simbolo" aria-hidden="true">p.</span><div><p class="marca">PsicoLab<span>2.0</span></p><p class="lema">Un espacio para explorar quién eres</p></div></div>
+      <span class="sello"><i aria-hidden="true"></i> Personas + inteligencia artificial</span>
     </div>
-    <div class="puntos" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
   </header>
-  <main id="app" class="contenido"></main>
-  <noscript><p class="contenido">Activa JavaScript en tu navegador para usar PsicoLab.</p></noscript>
+  <nav id="recorrido" class="recorrido" aria-label="Tu recorrido" hidden></nav>
+  <main id="app" class="contenido" tabindex="-1"></main>
+  <footer class="pie-sitio"><strong>PsicoLab.</strong><span>Curiosidad primero. Etiquetas, después.</span><span>Experiencia educativa · No es un diagnóstico</span></footer>
+  <noscript><p>Activa JavaScript en tu navegador para usar PsicoLab.</p></noscript>
 </body>
 </html>

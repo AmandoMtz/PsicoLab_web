@@ -177,3 +177,7 @@ Costo: Starter US$7/mes y disco US$0.25/GB/mes, cobrados por segundo; unos US$0.
 
 ## 12. Actualización del 14/11/2026
 El usuario autorizó mejorar la web y añadir animaciones. La capa `css/mejoras.css` reemplaza el requisito de identidad visual exacta únicamente en la web. Se preservó el núcleo y las tarjetas. Véanse `CAMBIOS_RENDER.md` y `RENDER.md` para el estado actualizado (64 pruebas, revisión visual pendiente por limitación del entorno). `render.yaml` es una prueba Free sin disco; todavía NO está desplegado. El consentimiento original sigue pendiente de aprobación. `js/sesion.js` conserva avance en la pestaña con caducidad de dos horas. El actualizador PowerShell valida todos los archivos antes de escribir y acepta originales o ya actualizados.
+
+
+## 13. Rediseño web solicitado por el usuario (14/11/2026)
+El usuario pidió una web más intuitiva y personalizada tras verla publicada en Render. La web usa ahora cuatro bloques de cinco preguntas, selección visual de carrera y nueva composición de inicio/resultado. Esto sustituye en la web la lista de 20 preguntas en una sola pantalla y el requisito visual de escritorio. No cambia la API ni el núcleo. Véase REDISENO_WEB.md para alcance y validación; el rediseño todavía no se ha publicado.

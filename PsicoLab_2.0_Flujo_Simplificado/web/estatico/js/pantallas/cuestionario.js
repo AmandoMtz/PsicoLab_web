@@ -4,108 +4,106 @@ import { estado, preguntasFaltantes } from '../estado.js';
 import { DIMENSIONES, PREGUNTAS_POR_DIMENSION } from '../textos.js';
 import { boton, el, panel, pantalla } from '../ui.js';
 
-function encabezadoDimension(numero) {
-  const { titulo, color } = DIMENSIONES[numero];
-  return el('p', { class: 'dimension', style: `color: ${color}` }, `DIMENSIÓN ${numero + 1} · ${titulo}`);
-}
-
-function bloquePregunta(pregunta, indice, alResponder) {
-  const numero = String(indice + 1).padStart(2, '0');
-  const idTexto = `pregunta-${indice}`;
-  return el('div', { class: 'pregunta', role: 'radiogroup', 'aria-labelledby': idTexto },
-    el('p', { class: 'pregunta-texto', id: idTexto }, `${numero}. ${pregunta.pregunta} *`),
-    ['A', 'B'].map((letra) => el('label', { class: 'opcion' },
-      el('input', {
-        type: 'radio',
-        name: idTexto,
-        value: letra,
-        checked: estado.respuestas[indice] === letra,
-        onchange: () => alResponder(letra),
-      }),
-      el('span', {}, `${letra}) ${pregunta[letra]}`))));
-}
+const TEMAS = ['Cómo te relacionas', 'Cómo descubres', 'Cómo decides', 'Cómo te organizas'];
+const PISTAS = ['Piensa en cómo prefieres compartir tu tiempo y tu energía.', 'Piensa en qué suele llamar tu atención cuando conoces algo nuevo.', 'Piensa en qué te ayuda a elegir entre distintas posibilidades.', 'Piensa en cómo prefieres llevar tus planes y actividades.'];
 
 export function mostrarCuestionario(contenedor, app) {
   const { preguntas } = app.catalogo;
   const total = preguntas.length;
-  const barra = el('div', { class: 'progreso-barra' });
-  const contador = el('p', { class: 'progreso-texto', role: 'status', 'aria-live': 'polite' });
+  const grupos = Math.ceil(total / PREGUNTAS_POR_DIMENSION);
+  let grupo = Math.floor((preguntasFaltantes(total)[0] ?? 0) / PREGUNTAS_POR_DIMENSION);
+  let enviando = false;
+  const cuerpo = el('div', { class: 'grupo-preguntas' });
+  const titulo = el('h2', { class: 'titulo-grupo', tabindex: '-1' });
+  const pista = el('p', { class: 'pista-grupo' });
   const aviso = el('p', { class: 'aviso', role: 'alert' });
-  const verResultado = boton('Ver mi resultado', () => enviar(), 'pendiente');
-  const bloques = preguntas.map((pregunta, i) => bloquePregunta(pregunta, i, (letra) => responder(i, letra)));
+  const barra = el('div', { class: 'progreso-barra' });
+  const progreso = el('div', { class: 'progreso', role: 'progressbar', 'aria-label': 'Preguntas respondidas', 'aria-valuemin': '0', 'aria-valuemax': String(total), 'aria-valuenow': '0' }, barra);
+  const contador = el('p', { class: 'progreso-texto', role: 'status', 'aria-live': 'polite' });
+  const anterior = boton('← Anterior', () => { if (grupo > 0) cambiar(grupo - 1); else app.ir('datos'); });
+  const siguiente = boton('Siguiente bloque →', avanzar, 'primario');
+  const pasos = Array.from({ length: grupos }, (_, i) => boton('', () => cambiar(i), 'grupo'));
+  pasos.forEach((b) => b.classList.add('paso-grupo'));
+  const vista = pantalla('cuestionario',
+    el('div', { class: 'encabezado-pagina' }, el('p', { class: 'sobrelinea' }, 'PASO 03 / TUS PREFERENCIAS'), el('h1', { class: 'titulo-pantalla' }, 'Aquí no hay respuestas incorrectas.'), el('p', { class: 'subtitulo' }, 'Elige la opción que más se parezca a ti, aunque ninguna te describa por completo.')),
+    el('div', { class: 'cuestionario-layout' },
+      el('aside', { class: 'mapa-cuestionario' }, el('p', { class: 'sobrelinea' }, 'TU RECORRIDO'), el('nav', { 'aria-label': 'Bloques del cuestionario' }, pasos), el('div', { class: 'resumen-progreso' }, contador, progreso, el('p', { class: 'microtexto' }, 'Puedes volver y cambiar tus respuestas.'))),
+      panel({ clase: 'panel-preguntas' }, el('div', { class: 'cabecera-grupo' }, titulo, pista), cuerpo, aviso,
+        el('div', { class: 'acciones pie-cuestionario' }, anterior, siguiente))));
+  contenedor.append(vista);
 
   function actualizar() {
-    const respondidas = total - preguntasFaltantes(total).length;
-    barra.style.width = `${(100 * respondidas) / total}%`;
-    barra.parentElement?.setAttribute('aria-valuenow', String(respondidas));
-    bloques.forEach((bloque, i) => bloque.classList.toggle('respondida', Boolean(estado.respuestas[i])));
-    contador.textContent = `${respondidas} de ${total} preguntas respondidas`;
-    verResultado.className = `boton boton-${respondidas === total ? 'primario' : 'pendiente'}`;
+    const n = total - preguntasFaltantes(total).length;
+    barra.style.width = `${100 * n / total}%`;
+    progreso.setAttribute('aria-valuenow', String(n));
+    contador.textContent = `${n} de ${total} respuestas`;
+    pasos.forEach((b, i) => {
+      const inicio = i * PREGUNTAS_POR_DIMENSION;
+      const fin = Math.min(inicio + PREGUNTAS_POR_DIMENSION, total);
+      const hechas = preguntas.slice(inicio, fin).filter((_, j) => estado.respuestas[inicio + j]).length;
+      b.replaceChildren(el('span', { class: 'numero-bloque', 'aria-hidden': 'true' }, hechas === fin - inicio ? '✓' : String(i + 1)), el('span', { class: 'nombre-bloque' }, TEMAS[i], el('small', {}, `${hechas} / ${fin - inicio} respuestas`)));
+      b.classList.toggle('activo', i === grupo);
+      if (i === grupo) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+      b.disabled = enviando;
+    });
   }
-
-  function responder(indice, letra) {
-    estado.respuestas[indice] = letra;
-    estado.resultado = null;
+  function cambiar(nuevo, enfocar = true) {
+    if (enviando) return;
+    grupo = nuevo;
     aviso.textContent = '';
+    titulo.textContent = `${String(grupo + 1).padStart(2, '0')} · ${TEMAS[grupo]}`;
+    pista.textContent = PISTAS[grupo];
+    const inicio = grupo * PREGUNTAS_POR_DIMENSION;
+    cuerpo.replaceChildren(...preguntas.slice(inicio, inicio + PREGUNTAS_POR_DIMENSION).map((p, offset) => {
+      const i = inicio + offset;
+      const bloque = el('fieldset', { class: `pregunta${estado.respuestas[i] ? ' respondida' : ''}`, id: `bloque-${i}` },
+        el('legend', { class: 'pregunta-texto' }, el('span', { class: 'numero-reactivo' }, String(i + 1).padStart(2, '0')), p.pregunta),
+        el('div', { class: 'opciones' }, ['A', 'B'].map((letra) => el('label', { class: 'opcion' },
+          el('input', { type: 'radio', name: `pregunta-${i}`, value: letra, checked: estado.respuestas[i] === letra,
+            onchange: () => {
+              estado.respuestas[i] = letra; estado.resultado = null;
+              bloque.classList.add('respondida'); aviso.textContent = ''; actualizar(); guardarSesion('cuestionario');
+            } }),
+          el('span', { class: 'letra-opcion', 'aria-hidden': 'true' }, letra), el('span', {}, p[letra])))));
+      return bloque;
+    }));
+    anterior.textContent = grupo === 0 ? '← Sobre ti' : '← Bloque anterior';
+    siguiente.textContent = grupo === grupos - 1 ? 'Descubrir mi perfil ✦' : 'Siguiente bloque →';
     actualizar();
+    if (enfocar) { titulo.focus({ preventScroll: true }); titulo.scrollIntoView({ block: 'start' }); }
   }
-
-  async function enviar() {
-    const faltantes = preguntasFaltantes(total);
+  async function avanzar() {
+    if (enviando) return;
+    const faltantes = preguntasFaltantes(total).filter(i => grupo === grupos - 1 || Math.floor(i / PREGUNTAS_POR_DIMENSION) === grupo);
     if (faltantes.length) {
-      // Igual que en escritorio: no se calcula una predicción parcial y se
-      // lleva al participante al primer reactivo sin responder.
-      aviso.textContent = `Faltan las preguntas: ${faltantes.map((i) => i + 1).join(', ')}`;
-      bloques[faltantes[0]].scrollIntoView({ block: 'start' });
-      bloques[faltantes[0]].querySelector('input').focus({ preventScroll: true });
+      const i = faltantes[0];
+      cambiar(Math.floor(i / PREGUNTAS_POR_DIMENSION), false);
+      aviso.textContent = `Todavía falta responder: ${faltantes.map(n => n + 1).join(', ')}. Elige una opción para continuar.`;
+      const input = cuerpo.querySelector(`input[name="pregunta-${i}"]`);
+      input.focus();
       return;
     }
-    if (verResultado.disabled) return;
-    verResultado.disabled = true;
-    verResultado.textContent = 'Calculando tu perfil…';
-    verResultado.setAttribute('aria-busy', 'true');
-    bloques.forEach((b) => b.querySelectorAll('input').forEach((n) => n.disabled = true));
-    // Mantener el mismo ID si se reintenta tras una interrupción de red.
-    estado.registroId ||= crypto.randomUUID();
-    guardarSesion('cuestionario');
+    if (grupo < grupos - 1) { cambiar(grupo + 1); return; }
+    enviando = true; actualizar();
+    vista.querySelectorAll('button, input').forEach(n => n.disabled = true);
+    siguiente.textContent = 'Preparando tu perfil…'; siguiente.setAttribute('aria-busy', 'true');
     try {
-      const resultado = await calcularResultado({
-        consentimiento: true,
-        edad: Number(estado.edad),
-        sexo: estado.sexo,
-        carrera: estado.carrera,
-        respuestas: preguntas.map((_, i) => estado.respuestas[i]),
-        registro_id: estado.registroId,
-      });
-      if (!verResultado.isConnected) return;
+      estado.registroId ||= crypto.randomUUID();
+      guardarSesion('cuestionario');
+      const resultado = await calcularResultado({ consentimiento: true, edad: Number(estado.edad), sexo: estado.sexo,
+        carrera: estado.carrera, respuestas: preguntas.map((_, i) => estado.respuestas[i]), registro_id: estado.registroId });
+      if (!vista.isConnected) return;
       estado.resultado = resultado;
-      if (estado.resultado.registro.guardado) estado.registroId = estado.resultado.registro.id;
+      if (resultado.registro.guardado) estado.registroId = resultado.registro.id;
       app.ir('resultado');
     } catch (error) {
+      if (!vista.isConnected) return;
       aviso.textContent = error.message;
-      verResultado.disabled = false;
-      verResultado.textContent = 'Ver mi resultado';
-      verResultado.removeAttribute('aria-busy');
-      bloques.forEach((b) => b.querySelectorAll('input').forEach((n) => n.disabled = false));
+      enviando = false;
+      vista.querySelectorAll('button, input').forEach(n => n.disabled = false);
+      siguiente.textContent = 'Reintentar mi resultado'; siguiente.removeAttribute('aria-busy');
+      actualizar();
     }
   }
-
-  contenedor.append(pantalla('cuestionario',
-    el('h1', { class: 'titulo-pantalla' }, 'Cuestionario de preferencias'),
-    el('p', { class: 'subtitulo' },
-      `${estado.edad} años · ${estado.sexo} · ${estado.carrera}  |  Todas las preguntas son obligatorias.`),
-    panel({},
-      el('div', { class: 'desplazable lista-preguntas' }, bloques.map((bloque, i) => [
-        i % PREGUNTAS_POR_DIMENSION === 0 && encabezadoDimension(i / PREGUNTAS_POR_DIMENSION),
-        bloque,
-        el('div', { class: 'separador' }),
-      ])),
-      el('div', { class: 'pie-cuestionario' },
-        el('div', { class: 'progreso', role: 'progressbar', 'aria-label': 'Preguntas respondidas', 'aria-valuemin': '0', 'aria-valuemax': String(total), 'aria-valuenow': '0' }, barra),
-        contador,
-        aviso,
-        el('div', { class: 'acciones' },
-          boton('← Datos generales', () => app.ir('datos')),
-          verResultado)))));
-  actualizar();
+  cambiar(grupo, false);
 }

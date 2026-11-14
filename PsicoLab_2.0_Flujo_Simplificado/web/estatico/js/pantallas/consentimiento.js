@@ -4,11 +4,11 @@ import { boton, el, panel, pantalla } from '../ui.js';
 
 export function mostrarConsentimiento(contenedor, app) {
   const aceptar = () => { estado.consentimiento = true; app.ir('datos'); };
-  const rechazar = () => { estado.consentimiento = false; app.ir('rechazo'); };
+  const rechazar = () => { reiniciar(); app.ir('rechazo'); };
   contenedor.append(pantalla('consentimiento',
-    el('h1', { class: 'titulo-pantalla' }, 'Consentimiento informado'),
+    el('div', { class: 'encabezado-pagina' }, el('p', { class: 'sobrelinea' }, 'PASO 01 / TU DECISIÓN'), el('h1', { class: 'titulo-pantalla' }, 'Tú decides participar.'), el('p', { class: 'subtitulo' }, 'Lee la información completa antes de elegir. Puedes aceptar o salir de la actividad.')),
     panel({},
-      el('div', { class: 'desplazable texto-consentimiento', tabindex: '0' },
+      el('div', { class: 'texto-consentimiento', tabindex: '0' },
         el('h2', {}, CONSENTIMIENTO_TITULO),
         el('div', { class: 'parrafos' }, CONSENTIMIENTO_PARRAFOS.map((parrafo) => el('p', {}, parrafo)))),
       el('div', { class: 'pie-panel' },
