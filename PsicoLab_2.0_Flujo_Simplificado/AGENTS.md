@@ -181,3 +181,12 @@ El usuario autorizó mejorar la web y añadir animaciones. La capa `css/mejoras.
 
 ## 13. Rediseño web solicitado por el usuario (14/11/2026)
 El usuario pidió una web más intuitiva y personalizada tras verla publicada en Render. La web usa ahora cuatro bloques de cinco preguntas, selección visual de carrera y nueva composición de inicio/resultado. Esto sustituye en la web la lista de 20 preguntas en una sola pantalla y el requisito visual de escritorio. No cambia la API ni el núcleo. Véase REDISENO_WEB.md para alcance y validación; el rediseño todavía no se ha publicado.
+
+
+## 14. Ajustes del 14/11/2026 (tras ver el sitio publicado)
+El usuario pidió tres cambios, solo en la web (API y núcleo intactos):
+1. La tarjeta del resultado es más grande (columna de 480 px en escritorio) y se abre completa al tocarla.
+2. La carrera se muestra con los nombres oficiales de la FADYCS (`js/carreras.js`): Licenciatura en Ciencias de la Comunicación, Derecho, Economía y Finanzas, Gestión y Desarrollo Turístico, Idioma Inglés y Psicología. Es solo la etiqueta: el valor enviado a la API sigue siendo el del catálogo, porque `career_areas` del núcleo busca por ese nombre. Si el catálogo cambia, se ajustan las claves de `carreras.js`.
+3. El cuestionario pasó de bloques de cinco preguntas a **una pregunta por pantalla**: opciones grandes, la elegida se rellena de azul marino con la letra en amarillo y la marca "Elegida", avance automático a los 450 ms (solo con toque o clic; con teclado no avanza solo), barra de 20 segmentos clicable y botón "Descubrir mi perfil" al final. Misma API y mismo envío de las 20 respuestas en orden.
+Pendiente: revisión visual en Chrome/Edge y en celular real, y volver a ejecutar `pytest`.
+

@@ -1,91 +1,128 @@
 import { guardarSesion } from '../sesion.js';
 import { calcularResultado } from '../api.js';
 import { estado, preguntasFaltantes } from '../estado.js';
-import { DIMENSIONES, PREGUNTAS_POR_DIMENSION } from '../textos.js';
+import { PREGUNTAS_POR_DIMENSION } from '../textos.js';
 import { boton, el, panel, pantalla } from '../ui.js';
 
 const TEMAS = ['Cómo te relacionas', 'Cómo descubres', 'Cómo decides', 'Cómo te organizas'];
 const PISTAS = ['Piensa en cómo prefieres compartir tu tiempo y tu energía.', 'Piensa en qué suele llamar tu atención cuando conoces algo nuevo.', 'Piensa en qué te ayuda a elegir entre distintas posibilidades.', 'Piensa en cómo prefieres llevar tus planes y actividades.'];
+const AVANCE_MS = 450;
 
+// Una pregunta por pantalla: al tocar una opción se marca con fuerza y,
+// tras un instante, se pasa sola a la siguiente.
 export function mostrarCuestionario(contenedor, app) {
   const { preguntas } = app.catalogo;
   const total = preguntas.length;
-  const grupos = Math.ceil(total / PREGUNTAS_POR_DIMENSION);
-  let grupo = Math.floor((preguntasFaltantes(total)[0] ?? 0) / PREGUNTAS_POR_DIMENSION);
+  let actual = preguntasFaltantes(total)[0] ?? 0;
   let enviando = false;
-  const cuerpo = el('div', { class: 'grupo-preguntas' });
-  const titulo = el('h2', { class: 'titulo-grupo', tabindex: '-1' });
+  let reintento = false;
+  let temporizador = null;
+
+  const chip = el('span', { class: 'tema-chip' });
+  const numero = el('p', { class: 'pregunta-numero', role: 'status', 'aria-live': 'polite' });
   const pista = el('p', { class: 'pista-grupo' });
+  const cuerpo = el('div', { class: 'cuerpo-pregunta' });
   const aviso = el('p', { class: 'aviso', role: 'alert' });
-  const barra = el('div', { class: 'progreso-barra' });
-  const progreso = el('div', { class: 'progreso', role: 'progressbar', 'aria-label': 'Preguntas respondidas', 'aria-valuemin': '0', 'aria-valuemax': String(total), 'aria-valuenow': '0' }, barra);
-  const contador = el('p', { class: 'progreso-texto', role: 'status', 'aria-live': 'polite' });
-  const anterior = boton('← Anterior', () => { if (grupo > 0) cambiar(grupo - 1); else app.ir('datos'); });
-  const siguiente = boton('Siguiente bloque →', avanzar, 'primario');
-  const pasos = Array.from({ length: grupos }, (_, i) => boton('', () => cambiar(i), 'grupo'));
-  pasos.forEach((b) => b.classList.add('paso-grupo'));
+  const segmentos = preguntas.map((_, i) => {
+    const b = el('button', { type: 'button', class: 'segmento', 'aria-label': `Ir a la pregunta ${i + 1}` });
+    b.addEventListener('click', () => ir(i));
+    return b;
+  });
+  const anterior = boton('← Anterior', () => { if (actual > 0) ir(actual - 1); else app.ir('datos'); });
+  const siguiente = boton('Siguiente →', continuar, 'primario');
   const vista = pantalla('cuestionario',
-    el('div', { class: 'encabezado-pagina' }, el('p', { class: 'sobrelinea' }, 'PASO 03 / TUS PREFERENCIAS'), el('h1', { class: 'titulo-pantalla' }, 'Aquí no hay respuestas incorrectas.'), el('p', { class: 'subtitulo' }, 'Elige la opción que más se parezca a ti, aunque ninguna te describa por completo.')),
-    el('div', { class: 'cuestionario-layout' },
-      el('aside', { class: 'mapa-cuestionario' }, el('p', { class: 'sobrelinea' }, 'TU RECORRIDO'), el('nav', { 'aria-label': 'Bloques del cuestionario' }, pasos), el('div', { class: 'resumen-progreso' }, contador, progreso, el('p', { class: 'microtexto' }, 'Puedes volver y cambiar tus respuestas.'))),
-      panel({ clase: 'panel-preguntas' }, el('div', { class: 'cabecera-grupo' }, titulo, pista), cuerpo, aviso,
-        el('div', { class: 'acciones pie-cuestionario' }, anterior, siguiente))));
+    el('div', { class: 'encabezado-pagina' }, el('p', { class: 'sobrelinea' }, 'PASO 03 / TUS PREFERENCIAS'), el('h1', { class: 'titulo-pantalla' }, 'Aquí no hay respuestas incorrectas.'), el('p', { class: 'subtitulo' }, 'Toca la opción que más se parezca a ti, aunque ninguna te describa por completo.')),
+    panel({ clase: 'panel-pregunta' },
+      el('div', { class: 'cabecera-pregunta' }, chip, numero),
+      el('div', { class: 'segmentos' }, segmentos),
+      pista, cuerpo, aviso,
+      el('div', { class: 'acciones pie-cuestionario' }, anterior, siguiente)));
   contenedor.append(vista);
 
-  function actualizar() {
-    const n = total - preguntasFaltantes(total).length;
-    barra.style.width = `${100 * n / total}%`;
-    progreso.setAttribute('aria-valuenow', String(n));
-    contador.textContent = `${n} de ${total} respuestas`;
-    pasos.forEach((b, i) => {
-      const inicio = i * PREGUNTAS_POR_DIMENSION;
-      const fin = Math.min(inicio + PREGUNTAS_POR_DIMENSION, total);
-      const hechas = preguntas.slice(inicio, fin).filter((_, j) => estado.respuestas[inicio + j]).length;
-      b.replaceChildren(el('span', { class: 'numero-bloque', 'aria-hidden': 'true' }, hechas === fin - inicio ? '✓' : String(i + 1)), el('span', { class: 'nombre-bloque' }, TEMAS[i], el('small', {}, `${hechas} / ${fin - inicio} respuestas`)));
-      b.classList.toggle('activo', i === grupo);
-      if (i === grupo) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+  function marcadores() {
+    const respondidas = total - preguntasFaltantes(total).length;
+    numero.textContent = `Pregunta ${actual + 1} de ${total} · ${respondidas} respondidas`;
+    segmentos.forEach((b, i) => {
+      b.classList.toggle('hecha', Boolean(estado.respuestas[i]));
+      b.classList.toggle('actual', i === actual);
+      if (i === actual) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
       b.disabled = enviando;
     });
+    anterior.textContent = actual === 0 ? '← Sobre ti' : '← Anterior';
+    siguiente.textContent = actual < total - 1 ? 'Siguiente →' : reintento ? 'Reintentar mi resultado' : 'Descubrir mi perfil ✦';
   }
-  function cambiar(nuevo, enfocar = true) {
-    if (enviando) return;
-    grupo = nuevo;
+
+  function pintar(enfocar) {
+    const p = preguntas[actual];
+    const bloque = Math.floor(actual / PREGUNTAS_POR_DIMENSION);
+    chip.textContent = TEMAS[bloque] ?? `Bloque ${bloque + 1}`;
+    chip.dataset.bloque = String(bloque % 4);
+    pista.textContent = PISTAS[bloque] ?? '';
     aviso.textContent = '';
-    titulo.textContent = `${String(grupo + 1).padStart(2, '0')} · ${TEMAS[grupo]}`;
-    pista.textContent = PISTAS[grupo];
-    const inicio = grupo * PREGUNTAS_POR_DIMENSION;
-    cuerpo.replaceChildren(...preguntas.slice(inicio, inicio + PREGUNTAS_POR_DIMENSION).map((p, offset) => {
-      const i = inicio + offset;
-      const bloque = el('fieldset', { class: `pregunta${estado.respuestas[i] ? ' respondida' : ''}`, id: `bloque-${i}` },
-        el('legend', { class: 'pregunta-texto' }, el('span', { class: 'numero-reactivo' }, String(i + 1).padStart(2, '0')), p.pregunta),
-        el('div', { class: 'opciones' }, ['A', 'B'].map((letra) => el('label', { class: 'opcion' },
-          el('input', { type: 'radio', name: `pregunta-${i}`, value: letra, checked: estado.respuestas[i] === letra,
-            onchange: () => {
-              estado.respuestas[i] = letra; estado.resultado = null;
-              bloque.classList.add('respondida'); aviso.textContent = ''; actualizar(); guardarSesion('cuestionario');
-            } }),
-          el('span', { class: 'letra-opcion', 'aria-hidden': 'true' }, letra), el('span', {}, p[letra])))));
-      return bloque;
-    }));
-    anterior.textContent = grupo === 0 ? '← Sobre ti' : '← Bloque anterior';
-    siguiente.textContent = grupo === grupos - 1 ? 'Descubrir mi perfil ✦' : 'Siguiente bloque →';
-    actualizar();
-    if (enfocar) { titulo.focus({ preventScroll: true }); titulo.scrollIntoView({ block: 'start' }); }
+    const titulo = el('legend', { class: 'pregunta-titulo', tabindex: '-1' }, p.pregunta);
+    cuerpo.replaceChildren(el('fieldset', { class: 'pregunta', id: `bloque-${actual}` }, titulo,
+      el('div', { class: 'opciones' }, ['A', 'B'].map((letra) => {
+        const input = el('input', { type: 'radio', name: `pregunta-${actual}`, value: letra, checked: estado.respuestas[actual] === letra });
+        // detail > 0: toque o clic. Con el teclado no se avanza solo, para poder comparar A y B.
+        input.addEventListener('click', (evento) => elegir(letra, evento.detail > 0));
+        return el('label', { class: 'opcion' }, input,
+          el('span', { class: 'letra-opcion', 'aria-hidden': 'true' }, letra),
+          el('span', { class: 'texto-opcion' }, p[letra]),
+          el('span', { class: 'marca-elegida', 'aria-hidden': 'true' }, '✓ Elegida'));
+      }))));
+    marcadores();
+    if (enfocar) {
+      titulo.focus({ preventScroll: true });
+      if (vista.getBoundingClientRect().top < 0) vista.scrollIntoView({ block: 'start' });
+    }
   }
-  async function avanzar() {
+
+  function ir(nuevo, enfocar = true) {
     if (enviando) return;
-    const faltantes = preguntasFaltantes(total).filter(i => grupo === grupos - 1 || Math.floor(i / PREGUNTAS_POR_DIMENSION) === grupo);
-    if (faltantes.length) {
-      const i = faltantes[0];
-      cambiar(Math.floor(i / PREGUNTAS_POR_DIMENSION), false);
-      aviso.textContent = `Todavía falta responder: ${faltantes.map(n => n + 1).join(', ')}. Elige una opción para continuar.`;
-      const input = cuerpo.querySelector(`input[name="pregunta-${i}"]`);
-      input.focus();
+    clearTimeout(temporizador);
+    actual = nuevo;
+    pintar(enfocar);
+  }
+
+  function elegir(letra, avanzarSolo) {
+    if (enviando) return;
+    estado.respuestas[actual] = letra;
+    estado.resultado = null;
+    aviso.textContent = '';
+    guardarSesion('cuestionario');
+    marcadores();
+    clearTimeout(temporizador);
+    if (avanzarSolo && actual < total - 1) {
+      const desde = actual;
+      temporizador = setTimeout(() => { if (vista.isConnected && !enviando && actual === desde) ir(desde + 1); }, AVANCE_MS);
+    }
+  }
+
+  async function continuar() {
+    if (enviando) return;
+    if (actual < total - 1) {
+      if (!estado.respuestas[actual]) {
+        aviso.textContent = 'Toca una opción para continuar.';
+        cuerpo.querySelector('input')?.focus();
+        return;
+      }
+      ir(actual + 1);
       return;
     }
-    if (grupo < grupos - 1) { cambiar(grupo + 1); return; }
-    enviando = true; actualizar();
-    vista.querySelectorAll('button, input').forEach(n => n.disabled = true);
+    const faltantes = preguntasFaltantes(total);
+    if (faltantes.length) {
+      ir(faltantes[0], false);
+      aviso.textContent = `Todavía falta responder: ${faltantes.map((n) => n + 1).join(', ')}. Toca una opción para continuar.`;
+      cuerpo.querySelector('input')?.focus();
+      return;
+    }
+    enviar();
+  }
+
+  async function enviar() {
+    clearTimeout(temporizador);
+    enviando = true; marcadores();
+    vista.querySelectorAll('button, input').forEach((n) => { n.disabled = true; });
     siguiente.textContent = 'Preparando tu perfil…'; siguiente.setAttribute('aria-busy', 'true');
     try {
       estado.registroId ||= crypto.randomUUID();
@@ -99,11 +136,12 @@ export function mostrarCuestionario(contenedor, app) {
     } catch (error) {
       if (!vista.isConnected) return;
       aviso.textContent = error.message;
-      enviando = false;
-      vista.querySelectorAll('button, input').forEach(n => n.disabled = false);
-      siguiente.textContent = 'Reintentar mi resultado'; siguiente.removeAttribute('aria-busy');
-      actualizar();
+      enviando = false; reintento = true;
+      vista.querySelectorAll('button, input').forEach((n) => { n.disabled = false; });
+      siguiente.removeAttribute('aria-busy');
+      marcadores();
     }
   }
-  cambiar(grupo, false);
+
+  pintar(false);
 }

@@ -3,18 +3,20 @@ import { eliminarRegistro } from '../api.js';
 import { estado, reiniciar } from '../estado.js';
 import { AVISO_IA } from '../textos.js';
 import { boton, el, panel, pantalla } from '../ui.js';
+import { etiquetaCarrera } from '../carreras.js';
 
 function panelTarjeta(resultado) {
   return panel({ clase: 'panel-tarjeta' },
-    el('div', { class: 'tarjeta-marco' }, el('img', { src: resultado.tarjeta, alt: `Tarjeta digital del perfil ${resultado.perfil}`, width: '800', height: '1000', decoding: 'async' })),
+    el('div', { class: 'tarjeta-marco' }, el('a', { class: 'tarjeta-enlace', href: resultado.tarjeta, target: '_blank', rel: 'noopener', 'aria-label': 'Abrir mi tarjeta en tamaño completo' },
+      el('img', { src: resultado.tarjeta, alt: `Tarjeta digital del perfil ${resultado.perfil}`, width: '800', height: '1000', decoding: 'async' }))),
     el('a', { class: 'boton boton-secundario descargar', href: resultado.tarjeta, download: `PsicoLab-${resultado.perfil}.png` }, '↓ Descargar mi tarjeta'),
-    el('p', { class: 'microtexto' }, `Perfil ${resultado.perfil} · Clase ${resultado.clase} de 16`));
+    el('p', { class: 'microtexto' }, `Perfil ${resultado.perfil} · Clase ${resultado.clase} de 16 · Toca la tarjeta para verla completa`));
 }
 function panelTrabajos(resultado) {
   return panel({ clase: 'panel-trabajos' },
     el('p', { class: 'sobrelinea' }, 'DE TUS PREFERENCIAS A LAS POSIBILIDADES'),
     el('h2', {}, '¿Dónde podrías explorar?'),
-    el('p', { class: 'intro-trabajos' }, 'Tres áreas relacionadas con ', el('strong', {}, resultado.carrera), ' y el perfil estimado. Tómalas como ideas para investigar.'),
+    el('p', { class: 'intro-trabajos' }, 'Tres áreas relacionadas con ', el('strong', {}, etiquetaCarrera(resultado.carrera)), ' y el perfil estimado. Tómalas como ideas para investigar.'),
     resultado.areas.map((area, i) => el('article', { class: `trabajo trabajo-${i + 1}` },
       el('span', { class: 'trabajo-numero', 'aria-hidden': 'true' }, String(i + 1).padStart(2, '0')),
       el('div', {}, el('h3', {}, area.area), el('p', {}, area.actividades)))),
@@ -65,7 +67,7 @@ export function mostrarResultado(contenedor, app) {
   contenedor.append(pantalla('resultado',
     el('div', { class: 'resultado-encabezado' },
       el('div', {}, el('p', { class: 'sobrelinea' }, 'PASO 04 / TU PERFIL'), el('h1', { class: 'titulo-pantalla' }, 'Una nueva forma de mirarte.'), el('p', { class: 'subtitulo' }, 'Tus respuestas dieron lugar a este perfil estimado. Explora qué te resulta familiar y qué te sorprende.')),
-      el('div', { class: 'perfil-insignia' }, el('small', {}, 'TU PERFIL ESTIMADO'), el('strong', {}, resultado.perfil), el('span', {}, resultado.carrera))),
+      el('div', { class: 'perfil-insignia' }, el('small', {}, 'TU PERFIL ESTIMADO'), el('strong', {}, resultado.perfil), el('span', {}, etiquetaCarrera(resultado.carrera)))),
     el('div', { class: 'paneles' }, panelTarjeta(resultado), panelTrabajos(resultado)),
     el('div', { class: 'resultado-cierre' }, el('div', {}, el('h2', {}, 'Tu resultado abre una conversación.'), el('p', {}, 'No define quién eres ni limita lo que puedes llegar a hacer.')),
       el('div', { class: 'acciones' }, boton('← Revisar mis respuestas', () => app.ir('cuestionario')), boton('Nuevo cuestionario', nuevo, 'marino'))),

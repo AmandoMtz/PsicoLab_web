@@ -34,3 +34,11 @@ El script comprueba TODOS los archivos antes de escribir. Acepta la versión des
 5. Abre el sitio, recarga con Ctrl+F5 y prueba consentimiento → datos → 4 bloques → resultado. En celular revisa que los controles sean visibles, que no exista desplazamiento horizontal y que puedas volver a cambiar respuestas.
 
 La actualización no se ha subido a GitHub ni desplegado desde esta entrega: falta una sesión GitHub autorizada para escritura.
+
+## Ajustes posteriores — 14/11/2026
+- Tarjeta del resultado más grande (480 px en escritorio, hasta 520 px en celular) y enlace para verla a tamaño completo.
+- Carreras con los nombres oficiales de la Facultad de Derecho y Ciencias Sociales (FADYCS), solo como etiqueta; el valor enviado a la API no cambia. Selección marcada en azul marino.
+- Cuestionario de una pregunta por pantalla: opciones grandes, respuesta elegida muy marcada ("Elegida" + letra amarilla), avance automático, barra de 20 segmentos y botón final "Descubrir mi perfil".
+- Archivos: `js/carreras.js` (nuevo), `js/pantallas/cuestionario.js`, `datos.js`, `resultado.js`, `css/estilos.css`, `css/mejoras.css`.
+- Verificación: sintaxis con Node, prueba de interfaz en DOM simulado (avance automático, sin avance con teclado, aviso si falta responder, vuelta atrás conserva la respuesta, envío de las 20 respuestas) y capturas en Chrome de escritorio y celular. Falta volver a ejecutar `pytest` en tu equipo.
+
