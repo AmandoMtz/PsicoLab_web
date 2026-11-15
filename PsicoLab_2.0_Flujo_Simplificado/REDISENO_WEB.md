@@ -42,3 +42,8 @@ La actualización no se ha subido a GitHub ni desplegado desde esta entrega: fal
 - Archivos: `js/carreras.js` (nuevo), `js/pantallas/cuestionario.js`, `datos.js`, `resultado.js`, `css/estilos.css`, `css/mejoras.css`.
 - Verificación: sintaxis con Node, prueba de interfaz en DOM simulado (avance automático, sin avance con teclado, aviso si falta responder, vuelta atrás conserva la respuesta, envío de las 20 respuestas) y capturas en Chrome de escritorio y celular. Falta volver a ejecutar `pytest` en tu equipo.
 
+## Ajustes — 15/11/2026
+- El logotipo PsicoLab regresa al inicio; las dos tarjetas de ejemplo y los tres pasos del inicio tienen animación al pasar el ratón.
+- Letra más grande en las preguntas y tarjeta del resultado de 600 px en escritorio, para que se pueda leer sin esfuerzo.
+- Archivos: `index.html`, `js/main.js`, `js/pantallas/datos.js`, `css/estilos.css`, `css/mejoras.css`.
+

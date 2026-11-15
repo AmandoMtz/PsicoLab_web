@@ -190,3 +190,9 @@ El usuario pidió tres cambios, solo en la web (API y núcleo intactos):
 3. El cuestionario pasó de bloques de cinco preguntas a **una pregunta por pantalla**: opciones grandes, la elegida se rellena de azul marino con la letra en amarillo y la marca "Elegida", avance automático a los 450 ms (solo con toque o clic; con teclado no avanza solo), barra de 20 segmentos clicable y botón "Descubrir mi perfil" al final. Misma API y mismo envío de las 20 respuestas en orden.
 Pendiente: revisión visual en Chrome/Edge y en celular real, y volver a ejecutar `pytest`.
 
+## 15. Ajustes del 15/11/2026
+- El logotipo del encabezado (`.identidad`) es un enlace: lleva al inicio sin borrar el avance de la sesión; si ya se está en el inicio, sube al principio.
+- Inicio: las dos tarjetas de ejemplo se mueven al pasar el ratón (antes solo la frontal) y los tres pasos "Así de sencillo" se elevan y resaltan su número. Usan `:hover` dentro de `@media (hover:hover)` para no afectar a los celulares.
+- Letra más grande para facilitar la lectura: pregunta hasta 35 px, opciones hasta 21 px, letras A/B de 50 px y botones del cuestionario de 16 px.
+- Tarjeta del resultado más grande: columna de 600 px en escritorio (500 px en pantallas medianas, hasta 640 px en celular).
+

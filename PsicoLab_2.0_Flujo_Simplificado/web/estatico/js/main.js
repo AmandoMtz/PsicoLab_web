@@ -22,6 +22,13 @@ const contenedor = document.getElementById('app');
 const app = { catalogo: null, ir };
 let limpiezas = [];
 document.addEventListener('change', () => guardarSesion());
+// El logotipo lleva siempre al inicio; el avance de la sesión se conserva.
+document.querySelector('.identidad')?.addEventListener('click', (evento) => {
+  if (!app.catalogo || evento.button !== 0 || evento.ctrlKey || evento.metaKey || evento.shiftKey) return;
+  evento.preventDefault();
+  if (history.state?.pantalla === 'inicio') window.scrollTo({ top: 0, behavior: 'smooth' });
+  else ir('inicio');
+});
 window.addEventListener('pagehide', () => guardarSesion());
 
 // Mismas reglas que la app de escritorio: sin consentimiento no hay datos ni

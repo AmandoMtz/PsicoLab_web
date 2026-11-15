@@ -10,9 +10,25 @@
 @media (hover:hover) {
   .boton:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 16px #29244114; }
   .opcion:hover,.carrera-opcion:hover { border-color:#a999c3; }
-  .tarjeta-frente:hover { transform:rotate(3deg) translateY(-4px); }
 }
-.tarjeta-frente { transition:transform .3s ease; }
+.tarjeta-demo { transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease; }
+.tarjeta-demo:hover { z-index:4; box-shadow:0 26px 44px #30244535; }
+.tarjeta-atras:hover { transform:rotate(-16deg) translateY(-10px) scale(1.04); }
+.tarjeta-frente:hover { transform:rotate(3deg) translateY(-10px) scale(1.04); }
+.etiqueta-flotante { transition:transform .3s ease; }
+.hero-visual:hover .etiqueta-flotante { transform:rotate(-1deg) translateY(-3px); }
+.identidad { text-decoration:none; color:inherit; cursor:pointer; }
+.identidad .simbolo { transition:transform .25s cubic-bezier(.2,.8,.2,1); }
+.identidad:hover .simbolo { transform:rotate(-8deg) scale(1.08); }
+.paso-inicio { cursor:default; transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease; animation:aparecer .45s ease-out backwards; }
+.paso-inicio:nth-child(2) { animation-delay:.08s; }.paso-inicio:nth-child(3) { animation-delay:.16s; }
+.numero-paso { transition:background-color .25s, transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s; }
+@media (hover:hover) {
+  .paso-inicio:hover { transform:translateY(-6px); box-shadow:0 14px 28px #29244120; }
+  .paso-inicio:hover .numero-paso { background:var(--amarillo); border-color:var(--amarillo); transform:scale(1.15) rotate(-6deg); }
+}
+.tarjeta-demo:active { transform:scale(1.03); }
+.paso-inicio:active { transform:translateY(-3px); }
 @keyframes aparecer { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
@@ -21,3 +37,4 @@
   .cabecera,.recorrido,.pie-sitio,.acciones,.descargar,.registro { display:none; }
   body { background:white; }.contenido { padding:0; }.paneles { grid-template-columns:260px 1fr; }
 }
+.pie-cuestionario .boton { font-size:16px; min-height:52px; padding:0 22px; }
