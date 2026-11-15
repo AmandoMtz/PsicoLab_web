@@ -195,4 +195,5 @@ Pendiente: revisión visual en Chrome/Edge y en celular real, y volver a ejecuta
 - Inicio: las dos tarjetas de ejemplo se mueven al pasar el ratón (antes solo la frontal) y los tres pasos "Así de sencillo" se elevan y resaltan su número. Usan `:hover` dentro de `@media (hover:hover)` para no afectar a los celulares.
 - Letra más grande para facilitar la lectura: pregunta hasta 35 px, opciones hasta 21 px, letras A/B de 50 px y botones del cuestionario de 16 px.
 - Tarjeta del resultado más grande: columna de 600 px en escritorio (500 px en pantallas medianas, hasta 640 px en celular).
+- Se quitó la barra de pasos (Tu decisión / Sobre ti / Tus preferencias / Tu perfil) de todas las pantallas: elemento `#recorrido` de `index.html` y función `pintarRecorrido` de `main.js`. Las reglas `.recorrido` de `estilos.css` quedaron sin uso. El contenido sube y el espacio superior de `.pantalla` bajó de 36 a 26 px (18 px en celular).
 

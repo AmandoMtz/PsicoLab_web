@@ -50,27 +50,12 @@ function ir(nombre, { historial = true } = {}) {
   const titulo = contenedor.querySelector('h1');
   if (titulo) { titulo.tabIndex = -1; titulo.focus({ preventScroll: true }); }
   document.title = `${titulo?.textContent || 'Inicio'} | PsicoLab 2.0`;
-  pintarRecorrido(destino);
   guardarSesion(destino);
   window.scrollTo(0, 0);
   // Guardar cada pantalla en el historial hace que el botón "Atrás" del
   // navegador o del celular regrese a la pantalla anterior sin salir del sitio.
   if (historial) history.pushState({ pantalla: destino }, '');
   else history.replaceState({ pantalla: destino }, '');
-}
-
-function pintarRecorrido(destino) {
-  const nav = document.getElementById('recorrido');
-  nav.hidden = ['inicio', 'rechazo'].includes(destino);
-  const pasos = [['consentimiento', 'Tu decisión'], ['datos', 'Sobre ti'], ['cuestionario', 'Tus preferencias'], ['resultado', 'Tu perfil']];
-  const actual = pasos.findIndex(([clave]) => clave === destino);
-  nav.replaceChildren(el('ol', {}, pasos.map(([clave, texto], i) => {
-    const item = el('li', { class: i === actual ? 'actual' : i < actual ? 'completo' : '' },
-      el('span', { class: 'paso-indice', 'aria-hidden': 'true' }, i < actual ? '✓' : String(i + 1)),
-      el('span', {}, texto));
-    if (i === actual) item.setAttribute('aria-current', 'step');
-    return item;
-  })));
 }
 
 window.addEventListener('popstate', (evento) => {

@@ -46,4 +46,4 @@ La actualización no se ha subido a GitHub ni desplegado desde esta entrega: fal
 - El logotipo PsicoLab regresa al inicio; las dos tarjetas de ejemplo y los tres pasos del inicio tienen animación al pasar el ratón.
 - Letra más grande en las preguntas y tarjeta del resultado de 600 px en escritorio, para que se pueda leer sin esfuerzo.
 - Archivos: `index.html`, `js/main.js`, `js/pantallas/datos.js`, `css/estilos.css`, `css/mejoras.css`.
-
+- Se quitó la barra de pasos superior para dar más espacio al contenido.
