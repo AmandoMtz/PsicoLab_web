@@ -23,7 +23,11 @@ def crear_resultado(solicitud: SolicitudResultado):
 
 @router.delete('/registros/{registro_id}', status_code=status.HTTP_204_NO_CONTENT)
 def borrar_registro(registro_id: UUID):
-    if not servicio.eliminar_registro(registro_id):
+    try:
+        eliminado = servicio.eliminar_registro(registro_id)
+    except (ValueError, RuntimeError) as error:
+        raise HTTPException(status_code=503, detail=str(error)) from None
+    if not eliminado:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE,
                             'El almacenamiento no está disponible en el servidor.')
 

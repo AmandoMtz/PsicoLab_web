@@ -5,6 +5,7 @@ import logging
 from uuid import UUID
 
 import storage
+from . import supabase_storage
 from psicolab_core import career_areas, careers, predict_ai, questions
 from version import ALLOW_REAL_STORAGE
 
@@ -48,7 +49,8 @@ def _guardar(solicitud: SolicitudResultado, prediccion) -> Registro:
         return Registro(guardado=False, id=None, mensaje=estado.mensaje)
     anterior = str(solicitud.registro_id) if solicitud.registro_id else None
     try:
-        ident = storage.save(prediccion.answers, solicitud.carrera, prediccion.number,
+        backend = supabase_storage if supabase_storage.seleccionado() else storage
+        ident = backend.save(prediccion.answers, solicitud.carrera, prediccion.number,
                              prediccion.profile, anterior, age=solicitud.edad, sex=solicitud.sexo)
     except Exception as error:
         log.exception('No se pudo guardar el registro')
@@ -58,6 +60,9 @@ def _guardar(solicitud: SolicitudResultado, prediccion) -> Registro:
 
 def eliminar_registro(ident: UUID) -> bool:
     """Devuelve False si el servidor no tiene almacenamiento disponible."""
+    if supabase_storage.seleccionado():
+        supabase_storage.remove(str(ident))
+        return True
     if directorio_datos() is None:
         return False
     storage.remove(str(ident))
@@ -77,6 +82,12 @@ def salud() -> Salud:
 def _estado_almacenamiento() -> str:
     if not ALLOW_REAL_STORAGE:
         return 'desactivado'
+    if supabase_storage.seleccionado():
+        try:
+            supabase_storage.comprobar()
+        except (ValueError, RuntimeError) as error:
+            return f'error: {error}'
+        return 'listo (Supabase)'
     if directorio_datos() is None:
         return 'no configurado'
     try:

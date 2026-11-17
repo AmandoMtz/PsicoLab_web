@@ -14,6 +14,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from version import ALLOW_REAL_STORAGE
+from . import supabase_storage
 
 # México eliminó el horario de verano en 2022: el centro del país es UTC-6 todo el año.
 ZONA_MEXICO = timezone(timedelta(hours=-6), 'UTC-6')
@@ -72,6 +73,12 @@ def estado_registro(ahora: datetime | None = None) -> EstadoRegistro:
                                      'esta respuesta no se guardó.')
     if ventana.hasta and ahora >= ventana.hasta:
         return EstadoRegistro(False, 'El periodo de registro terminó; esta respuesta no se guardó.')
+    if supabase_storage.seleccionado():
+        try:
+            supabase_storage.configuracion()
+        except ValueError as error:
+            return EstadoRegistro(False, str(error))
+        return EstadoRegistro(True, 'Registro consentido guardado en Supabase (datos seudonimizados).')
     if directorio_datos() is None:
         return EstadoRegistro(False, 'El almacenamiento no está configurado en el servidor; '
                                      'esta respuesta no se guardó.')
