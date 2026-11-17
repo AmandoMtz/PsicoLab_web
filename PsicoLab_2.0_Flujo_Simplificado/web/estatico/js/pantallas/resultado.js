@@ -25,17 +25,20 @@ function panelTrabajos(resultado) {
 }
 
 function seccionRegistro(resultado) {
-  const zona = el('div', { class: 'registro' });
+  const zona = el('details', { class: 'acerca-resultado' });
+  const titulo = () => el('summary', {}, 'Mis datos');
 
   function pintar() {
     const { registro } = resultado;
     if (!registro.guardado) {
-      zona.replaceChildren(el('p', { class: 'aviso' }, registro.mensaje));
+      zona.replaceChildren(titulo(), el('p', { class: 'nota' },
+        registro.mensaje === 'Registro eliminado.'
+          ? 'Tus respuestas se han eliminado.'
+          : 'Tus respuestas no se guardaron. Puedes volver a intentarlo desde «Revisar mis respuestas».'));
       return;
     }
     zona.replaceChildren(
-      el('p', { class: 'exito' }, registro.mensaje),
-      el('p', { class: 'codigo' }, `Código de registro: ${registro.id}`),
+      titulo(),
       boton('Eliminar registro de esta sesión', eliminar, 'verde'));
   }
 
@@ -45,7 +48,7 @@ function seccionRegistro(resultado) {
       await eliminarRegistro(resultado.registro.id);
     } catch (error) {
       pintar();
-      zona.append(el('p', { class: 'aviso' }, `Error al eliminar: ${error.message}`));
+      zona.append(el('p', { class: 'aviso' }, 'No pudimos eliminar tus respuestas. Inténtalo nuevamente.'));
       return;
     }
     estado.registroId = null;
