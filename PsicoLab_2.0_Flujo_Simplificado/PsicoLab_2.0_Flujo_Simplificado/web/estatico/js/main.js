@@ -1,0 +1,85 @@
+import { obtenerCatalogo } from './api.js';
+import { datosCompletos, estado } from './estado.js';
+import { boton, el, panel, pantalla, vigilarDesborde } from './ui.js';
+import { mostrarInicio } from './pantallas/inicio.js';
+import { mostrarConsentimiento, mostrarRechazo } from './pantallas/consentimiento.js';
+import { mostrarDatos } from './pantallas/datos.js';
+import { mostrarCuestionario } from './pantallas/cuestionario.js';
+import { mostrarResultado } from './pantallas/resultado.js';
+import { mostrarIntroRetos, mostrarReto, mostrarResultadoRetos } from './pantallas/retos.js';
+
+import { guardarSesion, recuperarSesion } from './sesion.js';
+
+const PANTALLAS = {
+  inicio: mostrarInicio,
+  consentimiento: mostrarConsentimiento,
+  rechazo: mostrarRechazo,
+  datos: mostrarDatos,
+  cuestionario: mostrarCuestionario,
+  resultado: mostrarResultado,
+  retos_intro: mostrarIntroRetos,
+  retos: mostrarReto,
+  retos_resultado: mostrarResultadoRetos,
+};
+
+const contenedor = document.getElementById('app');
+const app = { catalogo: null, ir };
+let limpiezas = [];
+document.addEventListener('change', () => guardarSesion());
+// El logotipo lleva siempre al inicio; el avance de la sesión se conserva.
+document.querySelector('.identidad')?.addEventListener('click', (evento) => {
+  if (!app.catalogo || evento.button !== 0 || evento.ctrlKey || evento.metaKey || evento.shiftKey) return;
+  evento.preventDefault();
+  if (history.state?.pantalla === 'inicio') window.scrollTo({ top: 0, behavior: 'smooth' });
+  else ir('inicio');
+});
+window.addEventListener('pagehide', () => guardarSesion());
+
+// Mismas reglas que la app de escritorio: sin consentimiento no hay datos ni
+// cuestionario, y sin datos generales no hay cuestionario ni resultado.
+function pantallaPermitida(nombre) {
+  if (['datos', 'cuestionario', 'resultado', 'retos_intro', 'retos', 'retos_resultado'].includes(nombre) && !estado.consentimiento) return 'consentimiento';
+  if (['cuestionario', 'resultado', 'retos_intro', 'retos', 'retos_resultado'].includes(nombre) && !datosCompletos(app.catalogo.carreras)) return 'datos';
+  if (['resultado', 'retos_intro', 'retos', 'retos_resultado'].includes(nombre) && !estado.resultado) return 'cuestionario';
+  if (nombre === 'retos' && !estado.retos?.reto_id) return 'retos_intro';
+  if (nombre === 'retos_resultado' && !estado.retos?.resultado) return 'retos_intro';
+  return Object.hasOwn(PANTALLAS, nombre) ? nombre : 'inicio';
+}
+
+function ir(nombre, { historial = true } = {}) {
+  const destino = pantallaPermitida(nombre);
+  limpiezas.forEach((limpiar) => limpiar());
+  limpiezas = [];
+  contenedor.replaceChildren();
+  PANTALLAS[destino](contenedor, app);
+  contenedor.querySelectorAll('.desplazable').forEach((nodo) => limpiezas.push(vigilarDesborde(nodo)));
+  const titulo = contenedor.querySelector('h1');
+  if (titulo) { titulo.tabIndex = -1; titulo.focus({ preventScroll: true }); }
+  document.title = `${titulo?.textContent || 'Inicio'} | PsicoLab 2.0`;
+  guardarSesion(destino);
+  window.scrollTo(0, 0);
+  // Guardar cada pantalla en el historial hace que el botón "Atrás" del
+  // navegador o del celular regrese a la pantalla anterior sin salir del sitio.
+  if (historial) history.pushState({ pantalla: destino }, '');
+  else history.replaceState({ pantalla: destino }, '');
+}
+
+window.addEventListener('popstate', (evento) => {
+  if (app.catalogo) ir(evento.state?.pantalla ?? 'inicio', { historial: false });
+});
+
+async function arrancar() {
+  contenedor.replaceChildren(el('p', { class: 'cargando' }, 'Cargando PsicoLab…'));
+  try {
+    app.catalogo = await obtenerCatalogo();
+  } catch (error) {
+    contenedor.replaceChildren(pantalla('rechazo', panel({},
+      el('h1', { class: 'titulo-pantalla' }, 'No se pudo cargar el cuestionario'),
+      el('p', { class: 'explicacion' }, error.message),
+      el('div', { class: 'acciones' }, boton('Reintentar', arrancar, 'primario')))));
+    return;
+  }
+  ir(recuperarSesion(app.catalogo.carreras) || 'inicio', { historial: false });
+}
+
+arrancar();
