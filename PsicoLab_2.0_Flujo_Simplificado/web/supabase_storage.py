@@ -28,14 +28,16 @@ class SinRedireccion(HTTPRedirectHandler):
         return None
 
 
-def _request(method, query='', payload=None, prefer=None):
+def _request(method, query='', payload=None, prefer=None, *, tabla='respuestas'):
+    if tabla not in ('respuestas', 'retos'):
+        raise ValueError('Tabla no permitida.')
     url, key = configuracion()
     headers = {'apikey': key, 'Content-Type': 'application/json',
                'Accept': 'application/json'}
     if prefer:
         headers['Prefer'] = prefer
     data = None if payload is None else json.dumps(payload).encode('utf-8')
-    request = Request(url + '/rest/v1/respuestas' + query,
+    request = Request(url + '/rest/v1/' + tabla + query,
                       data=data, headers=headers, method=method)
     try:
         with build_opener(SinRedireccion()).open(request, timeout=12) as response:

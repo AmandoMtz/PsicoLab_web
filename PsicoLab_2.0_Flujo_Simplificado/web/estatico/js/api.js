@@ -30,3 +30,12 @@ export function calcularResultado(datos) {
 export function eliminarRegistro(id) {
   return pedir(`/api/registros/${encodeURIComponent(id)}`, { method: 'DELETE' });
 }
+
+export function iniciarRetos(registroId) {
+  return pedir('/api/retos/iniciar', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ registro_id: registroId }) });
+}
+export function finalizarRetos(retoId, decisiones) {
+  return pedir('/api/retos/finalizar', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ reto_id: retoId, decisiones }) });
+}

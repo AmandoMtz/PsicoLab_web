@@ -28,8 +28,11 @@ export function recuperarSesion(carreras) {
       edad: Number.isInteger(Number(d.edad)) && Number(d.edad) >= 17 && Number(d.edad) <= 65 ? String(d.edad) : '',
       sexo: ['Masculino', 'Femenino'].includes(d.sexo) ? d.sexo : '',
       carrera: carreras.includes(d.carrera) ? d.carrera : '', respuestas, registroId: id,
-      resultado: null });
+      resultado: null, retos: d.retos && /^[0-9a-f-]{36}$/i.test(d.retos.reto_id)
+        && Array.isArray(d.retos.decisiones) && d.retos.decisiones.length <= 3
+        && d.retos.decisiones.every(v => ['A', 'B', 'C'].includes(v))
+        ? { reto_id: d.retos.reto_id, decisiones: d.retos.decisiones } : null });
     // Los resultados se vuelven a calcular; el identificador evita duplicar el registro.
-    return guardado.pantalla === 'resultado' ? 'cuestionario' : guardado.pantalla;
+    return ['resultado', 'retos_intro', 'retos', 'retos_resultado'].includes(guardado.pantalla) ? 'cuestionario' : guardado.pantalla;
   } catch { try { sessionStorage.removeItem(CLAVE); } catch {} return 'inicio'; }
 }

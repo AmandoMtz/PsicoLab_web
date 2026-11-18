@@ -1,5 +1,3 @@
-import { guardarSesion } from '../sesion.js';
-import { eliminarRegistro } from '../api.js';
 import { estado, reiniciar } from '../estado.js';
 import { AVISO_IA } from '../textos.js';
 import { boton, el, panel, pantalla } from '../ui.js';
@@ -9,8 +7,7 @@ function panelTarjeta(resultado) {
   return panel({ clase: 'panel-tarjeta' },
     el('div', { class: 'tarjeta-marco' }, el('a', { class: 'tarjeta-enlace', href: resultado.tarjeta, target: '_blank', rel: 'noopener', 'aria-label': 'Abrir mi tarjeta en tamaño completo' },
       el('img', { src: resultado.tarjeta, alt: `Tarjeta digital del perfil ${resultado.perfil}`, width: '800', height: '1000', decoding: 'async' }))),
-    el('a', { class: 'boton boton-secundario descargar', href: resultado.tarjeta, download: `PsicoLab-${resultado.perfil}.png` }, '↓ Descargar mi tarjeta'),
-    el('p', { class: 'microtexto' }, `Perfil ${resultado.perfil} · Clase ${resultado.clase} de 16 · Toca la tarjeta para verla completa`));
+    el('a', { class: 'boton boton-secundario descargar', href: resultado.tarjeta, download: `PsicoLab-${resultado.perfil}.png` }, '↓ Descargar mi tarjeta'));
 }
 function panelTrabajos(resultado) {
   return panel({ clase: 'panel-trabajos' },
@@ -24,43 +21,6 @@ function panelTrabajos(resultado) {
     el('p', { class: 'nota' }, 'Sugerencias ilustrativas: no demuestran aptitud o empleabilidad.'));
 }
 
-function seccionRegistro(resultado) {
-  const zona = el('details', { class: 'acerca-resultado' });
-  const titulo = () => el('summary', {}, 'Mis datos');
-
-  function pintar() {
-    const { registro } = resultado;
-    if (!registro.guardado) {
-      zona.replaceChildren(titulo(), el('p', { class: 'nota' },
-        registro.mensaje === 'Registro eliminado.'
-          ? 'Tus respuestas se han eliminado.'
-          : 'Tus respuestas no se guardaron. Puedes volver a intentarlo desde «Revisar mis respuestas».'));
-      return;
-    }
-    zona.replaceChildren(
-      titulo(),
-      boton('Eliminar registro de esta sesión', eliminar, 'verde'));
-  }
-
-  async function eliminar() {
-    if (!window.confirm('¿Eliminar las respuestas, edad, sexo y carrera de esta sesión?')) return;
-    try {
-      await eliminarRegistro(resultado.registro.id);
-    } catch (error) {
-      pintar();
-      zona.append(el('p', { class: 'aviso' }, 'No pudimos eliminar tus respuestas. Inténtalo nuevamente.'));
-      return;
-    }
-    estado.registroId = null;
-    resultado.registro = { guardado: false, id: null, mensaje: 'Registro eliminado.' };
-    guardarSesion('resultado');
-    pintar();
-  }
-
-  pintar();
-  return zona;
-}
-
 export function mostrarResultado(contenedor, app) {
   const resultado = estado.resultado;
   const nuevo = () => {
@@ -69,11 +29,10 @@ export function mostrarResultado(contenedor, app) {
   };
   contenedor.append(pantalla('resultado',
     el('div', { class: 'resultado-encabezado' },
-      el('div', {}, el('p', { class: 'sobrelinea' }, 'PASO 04 / TU PERFIL'), el('h1', { class: 'titulo-pantalla' }, 'Una nueva forma de mirarte.'), el('p', { class: 'subtitulo' }, 'Tus respuestas dieron lugar a este perfil estimado. Explora qué te resulta familiar y qué te sorprende.')),
+      el('div', {}, el('p', { class: 'sobrelinea' }, 'PASO 4 / TU PERFIL'), el('h1', { class: 'titulo-pantalla' }, 'Una nueva forma de mirarte.'), el('p', { class: 'subtitulo' }, 'Tus respuestas dieron lugar a este perfil estimado. Explora qué te resulta familiar y qué te sorprende.')),
       el('div', { class: 'perfil-insignia' }, el('small', {}, 'TU PERFIL ESTIMADO'), el('strong', {}, resultado.perfil), el('span', {}, etiquetaCarrera(resultado.carrera)))),
     el('div', { class: 'paneles' }, panelTarjeta(resultado), panelTrabajos(resultado)),
-    el('div', { class: 'resultado-cierre' }, el('div', {}, el('h2', {}, 'Tu resultado abre una conversación.'), el('p', {}, 'No define quién eres ni limita lo que puedes llegar a hacer.')),
-      el('div', { class: 'acciones' }, boton('← Revisar mis respuestas', () => app.ir('cuestionario')), boton('Nuevo cuestionario', nuevo, 'marino'))),
-    seccionRegistro(resultado),
-    el('details', { class: 'acerca-resultado' }, el('summary', {}, 'Cómo se obtuvo este resultado'), el('p', { class: 'aviso-ia' }, AVISO_IA))));
+    el('div', { class: 'resultado-cierre' }, el('div', {}, el('h2', {}, 'Tu resultado'), el('p', {}, AVISO_IA)),
+      el('div', { class: 'acciones' }, boton('¡Ahora, un reto! →', () => app.ir('retos_intro'), 'primario'), boton('← Revisar mis respuestas', () => app.ir('cuestionario')), boton('Nuevo cuestionario', nuevo, 'marino'))),
+    !resultado.registro.guardado ? el('p', { class: 'aviso', role: 'status' }, 'Tus respuestas no se guardaron. Revisa tus respuestas para volver a intentarlo antes de iniciar los retos.') : null));
 }

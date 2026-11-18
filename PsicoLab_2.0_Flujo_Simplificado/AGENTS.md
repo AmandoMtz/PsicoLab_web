@@ -197,3 +197,12 @@ Pendiente: revisión visual en Chrome/Edge y en celular real, y volver a ejecuta
 - Tarjeta del resultado más grande: columna de 600 px en escritorio (500 px en pantallas medianas, hasta 640 px en celular).
 - Se quitó la barra de pasos (Tu decisión / Sobre ti / Tus preferencias / Tu perfil) de todas las pantallas: elemento `#recorrido` de `index.html` y función `pintarRecorrido` de `main.js`. Las reglas `.recorrido` de `estilos.css` quedaron sin uso. El contenido sube y el espacio superior de `.pantalla` bajó de 36 a 26 px (18 px en celular).
 
+## 16. Retos y correcciones solicitadas (17/11/2026)
+
+El responsable autorizó incorporar los retos de la nueva versión de escritorio y aplicar las marcas rojas de seis capturas. Esta autorización incluye los tres modelos B3 y sus funciones de entrada; el núcleo del perfil y el escritorio se conservan. Véase `ACTUALIZACION_RETOS.md` para publicar, verificar y conocer las limitaciones.
+
+La web ya utiliza Supabase. `SUPABASE_RETOS.sql` añade `public.retos` con predicciones previas, decisiones finales y entradas del cuestionario. La API vive en `web/retos.py`; las pantallas en `web/estatico/js/pantallas/retos.js`. La clave secreta solo se configura en Render. Los retos requieren Supabase y guardado activo. La nueva tabla usa RLS y se debe crear antes de desplegar.
+
+El consentimiento web admite las correcciones editoriales solicitadas; la prueba compara contra el original aplicando esas sustituciones explícitas. La etiqueta visual es «Género de nacimiento», pero el campo de API continúa siendo `sexo` por compatibilidad con los modelos. Se han retirado los textos tachados y el panel «Mis datos» de la interfaz; la ruta de eliminación sigue disponible y elimina también retos asociados.
+
+Verificación: 86 pruebas Python aprobadas, sintaxis JS y recorrido completo en DOM con Supabase simulado. Revisión visual en navegador real y publicación pendientes. No hay sesión autenticada de GitHub en el entorno de preparación. No afirmar que se publicó hasta comprobar el despliegue.

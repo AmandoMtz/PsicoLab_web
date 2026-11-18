@@ -6,6 +6,7 @@ import { mostrarConsentimiento, mostrarRechazo } from './pantallas/consentimient
 import { mostrarDatos } from './pantallas/datos.js';
 import { mostrarCuestionario } from './pantallas/cuestionario.js';
 import { mostrarResultado } from './pantallas/resultado.js';
+import { mostrarIntroRetos, mostrarReto, mostrarResultadoRetos } from './pantallas/retos.js';
 
 import { guardarSesion, recuperarSesion } from './sesion.js';
 
@@ -16,6 +17,9 @@ const PANTALLAS = {
   datos: mostrarDatos,
   cuestionario: mostrarCuestionario,
   resultado: mostrarResultado,
+  retos_intro: mostrarIntroRetos,
+  retos: mostrarReto,
+  retos_resultado: mostrarResultadoRetos,
 };
 
 const contenedor = document.getElementById('app');
@@ -34,9 +38,11 @@ window.addEventListener('pagehide', () => guardarSesion());
 // Mismas reglas que la app de escritorio: sin consentimiento no hay datos ni
 // cuestionario, y sin datos generales no hay cuestionario ni resultado.
 function pantallaPermitida(nombre) {
-  if (['datos', 'cuestionario', 'resultado'].includes(nombre) && !estado.consentimiento) return 'consentimiento';
-  if (['cuestionario', 'resultado'].includes(nombre) && !datosCompletos(app.catalogo.carreras)) return 'datos';
-  if (nombre === 'resultado' && !estado.resultado) return 'cuestionario';
+  if (['datos', 'cuestionario', 'resultado', 'retos_intro', 'retos', 'retos_resultado'].includes(nombre) && !estado.consentimiento) return 'consentimiento';
+  if (['cuestionario', 'resultado', 'retos_intro', 'retos', 'retos_resultado'].includes(nombre) && !datosCompletos(app.catalogo.carreras)) return 'datos';
+  if (['resultado', 'retos_intro', 'retos', 'retos_resultado'].includes(nombre) && !estado.resultado) return 'cuestionario';
+  if (nombre === 'retos' && !estado.retos?.reto_id) return 'retos_intro';
+  if (nombre === 'retos_resultado' && !estado.retos?.resultado) return 'retos_intro';
   return Object.hasOwn(PANTALLAS, nombre) ? nombre : 'inicio';
 }
 

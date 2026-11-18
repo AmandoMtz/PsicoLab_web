@@ -15,6 +15,7 @@ from version import VERSION
 from . import servicio
 from .config import leer_ventana
 from .rutas import router
+from .retos import router as retos_router
 
 ESTATICO = Path(__file__).resolve().parent / 'estatico'
 
@@ -52,6 +53,7 @@ def crear_app() -> FastAPI:
         return response
 
     app.include_router(router)
+    app.include_router(retos_router)
     app.mount('/tarjetas', StaticFiles(directory=ROOT / 'assets'), name='tarjetas')
     # Va al final: las pantallas web atienden todo lo que no sea /api, /docs o /tarjetas.
     app.mount('/', StaticFiles(directory=ESTATICO, html=True), name='pantallas')

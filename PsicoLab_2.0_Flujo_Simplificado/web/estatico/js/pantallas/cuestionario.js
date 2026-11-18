@@ -5,7 +5,6 @@ import { PREGUNTAS_POR_DIMENSION } from '../textos.js';
 import { boton, el, panel, pantalla } from '../ui.js';
 
 const TEMAS = ['Cómo te relacionas', 'Cómo descubres', 'Cómo decides', 'Cómo te organizas'];
-const PISTAS = ['Piensa en cómo prefieres compartir tu tiempo y tu energía.', 'Piensa en qué suele llamar tu atención cuando conoces algo nuevo.', 'Piensa en qué te ayuda a elegir entre distintas posibilidades.', 'Piensa en cómo prefieres llevar tus planes y actividades.'];
 const AVANCE_MS = 450;
 
 // Una pregunta por pantalla: al tocar una opción se marca con fuerza y,
@@ -20,7 +19,6 @@ export function mostrarCuestionario(contenedor, app) {
 
   const chip = el('span', { class: 'tema-chip' });
   const numero = el('p', { class: 'pregunta-numero', role: 'status', 'aria-live': 'polite' });
-  const pista = el('p', { class: 'pista-grupo' });
   const cuerpo = el('div', { class: 'cuerpo-pregunta' });
   const aviso = el('p', { class: 'aviso', role: 'alert' });
   const segmentos = preguntas.map((_, i) => {
@@ -31,11 +29,11 @@ export function mostrarCuestionario(contenedor, app) {
   const anterior = boton('← Anterior', () => { if (actual > 0) ir(actual - 1); else app.ir('datos'); });
   const siguiente = boton('Siguiente →', continuar, 'primario');
   const vista = pantalla('cuestionario',
-    el('div', { class: 'encabezado-pagina' }, el('p', { class: 'sobrelinea' }, 'PASO 03 / TUS PREFERENCIAS'), el('h1', { class: 'titulo-pantalla' }, 'Aquí no hay respuestas incorrectas.'), el('p', { class: 'subtitulo' }, 'Toca la opción que más se parezca a ti, aunque ninguna te describa por completo.')),
+    el('div', { class: 'encabezado-pagina' }, el('p', { class: 'sobrelinea' }, 'PASO 3 / TUS PREFERENCIAS'), el('h1', { class: 'titulo-pantalla' }, 'Aquí no hay respuestas incorrectas.'), el('p', { class: 'subtitulo' }, 'Toca la opción que más se parezca a ti, aunque ninguna te describa por completo.')),
     panel({ clase: 'panel-pregunta' },
       el('div', { class: 'cabecera-pregunta' }, chip, numero),
       el('div', { class: 'segmentos' }, segmentos),
-      pista, cuerpo, aviso,
+      cuerpo, aviso,
       el('div', { class: 'acciones pie-cuestionario' }, anterior, siguiente)));
   contenedor.append(vista);
 
@@ -57,7 +55,6 @@ export function mostrarCuestionario(contenedor, app) {
     const bloque = Math.floor(actual / PREGUNTAS_POR_DIMENSION);
     chip.textContent = TEMAS[bloque] ?? `Bloque ${bloque + 1}`;
     chip.dataset.bloque = String(bloque % 4);
-    pista.textContent = PISTAS[bloque] ?? '';
     aviso.textContent = '';
     const titulo = el('legend', { class: 'pregunta-titulo', tabindex: '-1' }, p.pregunta);
     cuerpo.replaceChildren(el('fieldset', { class: 'pregunta', id: `bloque-${actual}` }, titulo,
@@ -87,7 +84,7 @@ export function mostrarCuestionario(contenedor, app) {
   function elegir(letra, avanzarSolo) {
     if (enviando) return;
     estado.respuestas[actual] = letra;
-    estado.resultado = null;
+    estado.resultado = null; estado.retos = null;
     aviso.textContent = '';
     guardarSesion('cuestionario');
     marcadores();

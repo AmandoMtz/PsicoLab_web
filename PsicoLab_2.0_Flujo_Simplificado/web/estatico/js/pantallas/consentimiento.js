@@ -6,7 +6,7 @@ export function mostrarConsentimiento(contenedor, app) {
   const aceptar = () => { estado.consentimiento = true; app.ir('datos'); };
   const rechazar = () => { reiniciar(); app.ir('rechazo'); };
   contenedor.append(pantalla('consentimiento',
-    el('div', { class: 'encabezado-pagina' }, el('p', { class: 'sobrelinea' }, 'PASO 01 / TU DECISIÓN'), el('h1', { class: 'titulo-pantalla' }, 'Tú decides participar.'), el('p', { class: 'subtitulo' }, 'Lee la información completa antes de elegir. Puedes aceptar o salir de la actividad.')),
+    el('div', { class: 'encabezado-pagina' }, el('h1', { class: 'titulo-pantalla' }, 'Tú decides participar.'), el('p', { class: 'subtitulo' }, 'Lee la información completa antes de elegir.')),
     panel({},
       el('div', { class: 'texto-consentimiento', tabindex: '0' },
         el('h2', {}, CONSENTIMIENTO_TITULO),

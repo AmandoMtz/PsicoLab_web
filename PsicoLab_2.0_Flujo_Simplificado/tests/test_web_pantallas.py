@@ -43,11 +43,14 @@ def test_la_api_sigue_respondiendo_con_las_pantallas_montadas(cliente):
     assert cliente.get('/api/no-existe').status_code == 404
 
 
-def test_consentimiento_igual_al_de_escritorio():
+def test_consentimiento_con_correcciones_editoriales_autorizadas():
     arbol = ast.parse((RAIZ / 'app_psicolab.py').read_text(encoding='utf-8'))
     constantes = {nodo.targets[0].id: ast.literal_eval(nodo.value) for nodo in arbol.body
                   if isinstance(nodo, ast.Assign) and getattr(nodo.targets[0], 'id', '')
                   in ('CONSENT_TITLE', 'CONSENT_TEXT')}
     textos = (ESTATICO / 'js' / 'textos.js').read_text(encoding='utf-8')
     for fragmento in [constantes['CONSENT_TITLE'], *constantes['CONSENT_TEXT'].split('\n\n')]:
+        fragmento = (fragmento.replace('Consentimiento informado para participar en PsicoLab', 'Consentimiento de participación')
+                     .replace('Estimado(a) estudiante:', 'Estimado(a) participante:')
+                     .replace('anonima', 'anónima').replace('anonimo', 'anónimo').replace('  agrupada', ' agrupada'))
         assert json.dumps(fragmento, ensure_ascii=False)[1:-1] in textos, fragmento[:60]

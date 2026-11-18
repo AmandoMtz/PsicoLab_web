@@ -14,6 +14,7 @@ function inicial() {
     respuestas: {}, // índice de pregunta -> 'A' o 'B'
     registroId: null,
     resultado: null,
+    retos: null,
   };
 }
 
